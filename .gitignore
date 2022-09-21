@@ -85,3 +85,7 @@ lint/tmp/
 # lint/reports/
 
 .idea/
+
+# Default ignored files
+/shelf/
+/workspace.xml
