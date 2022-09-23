@@ -1,9 +1,3 @@
----
-description: >-
-  WeGiveYouEat high level diagram outlining what project is about and how it's
-  architecture will work on a high level
----
-
 # WeGiveYouEat - HLD
 
 ### Overview
