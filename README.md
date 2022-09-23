@@ -2,7 +2,13 @@
 
 ### About us
 
+Diego Anzola : [GitHub](https://github.com/danzola01)
 
+Brandon Bodemer : [GitHub](https://github.com/bbode837)
+
+Christian Shammas : [GitHub](https://github.com/csham420)
+
+Ramin Radmand : [GitHub](https://github.com/imraminradmand/)
 
 ### Overview
 
@@ -18,4 +24,4 @@ As storing information is a crucial part of this app [Google Cloud Firestore](ht
 
 The diagram below shows a high level architecture of this app, and outlines what Google Cloud service will be used.&#x20;
 
-<figure><img src=".gitbook/assets/Screen Shot 2022-09-22 at 7.46.52 PM (1).png" alt=""><figcaption><p>HLD - WeGiveYouEat</p></figcaption></figure>
+<figure><img src=".gitbook/assets/Screen Shot 2022-09-22 at 7.46.52 PM.png" alt=""><figcaption></figcaption></figure>
