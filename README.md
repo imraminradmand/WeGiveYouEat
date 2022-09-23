@@ -24,4 +24,4 @@ As storing information is a crucial part of this app [Google Cloud Firestore](ht
 
 The diagram below shows a high level architecture of this app, and outlines what Google Cloud service will be used.&#x20;
 
-<figure><img src=".gitbook/assets/Screen Shot 2022-09-22 at 7.46.52 PM.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/Screen Shot 2022-09-22 at 11.38.52 PM.png" alt=""><figcaption></figcaption></figure>
