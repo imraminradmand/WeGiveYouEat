@@ -20,13 +20,11 @@ WeGiveYouEat is aimed to reduce the amount of food that gets wasted from large g
 
 ### High level Design (HLD)
 
-As this is an Android app the backend logic will be hosted on [Google AppEngine](https://cloud.google.com/appengine#section-2), and the frontend will be emulated. A [Cloud Endpoint ](https://cloud.google.com/endpoints/docs)will be used to enable the frontend to communicate with the backend that is being deployed through App Engine.
+As part of this app's functionality there is a need for end users to connect with other users within their desired radius, the [Google Maps API](https://developers.google.com/maps/documentation/android-sdk) will be used for this. Allowing users to set a desired radius and search for items within it, ensuring that the no one has to go out of their way!
 
-As part of this app's functionality there is a need for end users to connect with other users within their desired radius, for this [Google Maps API](https://developers.google.com/maps/documentation/android-sdk) will be used. This will allow users to set a desired radius and search for items within it, ensuring that the no one has to go out of their way!
-
-As storing information is a crucial part of this app [Google Cloud Firestore](https://cloud.google.com/firestore#section-4) will be used. This option has been chosen as Firestore is a NoSQL database which will reduce overhead and allow for easier and more fluid implementation. As users create posts for items relevant data such as, images, location, time to pick up, good for time limit, dietary restrictions, amount and any other fields that are deemed necessary.
+As storing information is a crucial part of this project [Google Cloud Firestore](https://cloud.google.com/firestore#section-4) will be used. This option has been chosen as Firestore is a NoSQL database which will reduce overhead and allow for easier and more fluid implementation. As users create posts for items relevant data such as, images, location, time to pick up, good for time limit, dietary restrictions, amount and any other fields that are deemed necessary.
 
 The diagram below shows a high level architecture of this app, and outlines what Google Cloud service will be used.&#x20;
 
-<figure><img src=".gitbook/assets/Screen Shot 2022-09-22 at 11.38.52 PM.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/Screen Shot 2022-10-19 at 8.30.18 PM.png" alt=""><figcaption></figcaption></figure>
 
