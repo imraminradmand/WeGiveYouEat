@@ -16,7 +16,7 @@ WeGiveYouEat is aimed to reduce the amount of food that gets wasted from large g
 
 ### Figma Prototype
 
-<figure><img src=".gitbook/assets/Screen Shot 2022-09-28 at 6.41.22 PM.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="broken-reference" alt=""><figcaption></figcaption></figure>
 
 ### High level Design (HLD)
 
@@ -26,4 +26,4 @@ As storing information is a crucial part of this project [Google Cloud Firestore
 
 The diagram below shows a high level architecture of this app, and outlines what Google Cloud service will be used.
 
-<figure><img src=".gitbook/assets/Screenshot 2022-11-10 at 11.45.13 AM.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/Screenshot 2022-11-10 at 9.46.53 PM.png" alt=""><figcaption></figcaption></figure>
