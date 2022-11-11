@@ -16,7 +16,7 @@ WeGiveYouEat is aimed to reduce the amount of food that gets wasted from large g
 
 ### Figma Prototype
 
-<figure><img src="broken-reference" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/Screen Shot 2022-09-28 at 6.41.22 PM.png" alt=""><figcaption></figcaption></figure>
 
 ### High level Design (HLD)
 
