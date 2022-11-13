@@ -4,7 +4,7 @@ import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 import MainScreen from "../screens/MainScreen";
 import PostScreen from "../screens/PostScreen";
-import LoginScreen from "../screens/LoginScreen";
+import AuthStack from "./AuthNavigator";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
@@ -56,8 +56,8 @@ const BottomBar = () => {
         }}
       />
       <Tab.Screen
-        name="Login"
-        component={LoginScreen}
+        name="LoginFlow"
+        component={AuthStack}
         options={{
           tabBarIcon: ({ color, size }) => (
             <View style={styles.iconView}>

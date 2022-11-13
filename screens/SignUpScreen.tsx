@@ -18,7 +18,7 @@ import apple from "../assets/loginPage/apple.png";
 import google from "../assets/loginPage/google.png";
 import ms from "../assets/loginPage/MS.png";
 
-const SignUpPage = ({ navigaton }: { navigaton: any }) => {
+const SignUpScreen = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -164,7 +164,11 @@ const SignUpPage = ({ navigaton }: { navigaton: any }) => {
           }}
         >
           <Text>Already registered?</Text>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+          >
             <Text style={{ color: "#AD40AF", fontWeight: "700" }}> Login</Text>
           </TouchableOpacity>
         </View>
@@ -173,7 +177,7 @@ const SignUpPage = ({ navigaton }: { navigaton: any }) => {
   );
 };
 
-export default SignUpPage;
+export default SignUpScreen;
 
 const styles = StyleSheet.create({
   container: {

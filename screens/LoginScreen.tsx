@@ -140,7 +140,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
           }}
         >
           <Text>New to the app?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
             <Text style={{ color: "#AD40AF", fontWeight: "700" }}>
               {" "}
               Register
