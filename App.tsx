@@ -9,34 +9,25 @@ import { useFonts } from "expo-font";
 import SignUpPage from "./screens/SignUpScreen";
 import BottomBar from "./navigation/BottomBar";
 
-// SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  //   const [fontsLoaded] = useFonts({
-  //     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-  //   });
+  const [fontsLoaded] = useFonts({
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+  });
 
-  //   const onLayoutRootView = useCallback(async () => {
-  //     if (fontsLoaded) {
-  //       await SplashScreen.hideAsync();
-  //     }
-  //   }, [fontsLoaded]);
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
-  //   if (!fontsLoaded) {
-  //     return null;
-  //   }
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
-    // <View
-    //   style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-    //   onLayout={onLayoutRootView}
-    // >
-    //   {/* <MainScreen /> */}
-
-    //   {/* <LoginScreen /> */}
-    //   <SignUpPage />
-    // </View>
-    <NavigationContainer>
+    <NavigationContainer onReady={onLayoutRootView}>
       <BottomBar />
     </NavigationContainer>
   );
