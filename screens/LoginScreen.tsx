@@ -13,14 +13,12 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import logo from "../assets/loginPage/Logo.png";
 import apple from "../assets/loginPage/apple.png";
 import google from "../assets/loginPage/google.png";
-import facebook from "../assets/loginPage/facebook.png";
 import ms from "../assets/loginPage/MS.png";
-import twitter from "../assets/loginPage/twitter.png";
 
 import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ paddingHorizontal: 50, marginTop: 150 }}>
@@ -142,7 +140,7 @@ const LoginScreen = () => {
           }}
         >
           <Text>New to the app?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
             <Text style={{ color: "#AD40AF", fontWeight: "700" }}>
               {" "}
               Register

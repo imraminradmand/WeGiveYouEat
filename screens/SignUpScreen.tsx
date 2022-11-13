@@ -18,7 +18,7 @@ import apple from "../assets/loginPage/apple.png";
 import google from "../assets/loginPage/google.png";
 import ms from "../assets/loginPage/MS.png";
 
-const SignUpPage = () => {
+const SignUpPage = ({ navigaton }: { navigaton: any }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
