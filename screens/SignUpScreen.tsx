@@ -116,7 +116,7 @@ const SignUpPage = () => {
         />
 
         <InputField
-          label={"Email ID"}
+          label={"Email"}
           icon={
             <MaterialIcons
               name="alternate-email"
