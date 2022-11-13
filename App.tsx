@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { Text, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
-import MainScreen from './components/MainScreen'
+import MainScreen from './screens/MainScreen'
+
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -50,5 +51,8 @@ export default function App() {
       onLayout={onLayoutRootView}>
       <MainScreen />
     </View>
+    // <NavigationContainer>
+    //   <BottomBar/>
+    // </NavigationContainer>
   );
 }

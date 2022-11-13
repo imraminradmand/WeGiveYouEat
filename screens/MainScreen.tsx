@@ -9,15 +9,21 @@ import { LocationObject } from "expo-location";
 
 const styles = StyleSheet.create({
     map: {
-        width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height
+        ...StyleSheet.absoluteFillObject,
     },
     fab: {
         position: "absolute",
         right: 0,
         bottom: 0,
         marginRight: 20,
-        marginBottom: 150
+        marginBottom: 120
+    },
+    container: {
+        ...StyleSheet.absoluteFillObject,
+        width: Dimensions.get('screen').width,
+        height: Dimensions.get('screen').height,
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
     }
 })
 
@@ -45,17 +51,20 @@ const MainScreen = () => {
         mapRef.current.animateCamera({center: {"latitude":location?.coords.latitude, "longitude": location?.coords.longitude}});
     }
     return(
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <MapView 
                 style={styles.map} 
                 provider={PROVIDER_GOOGLE}
                 ref={mapRef}
+                showsUserLocation={true}
+                followsUserLocation={true}
                 initialRegion={{
                     latitude: 51.0447,
                     longitude: -114.0719,
                     longitudeDelta: 0.09,
                     latitudeDelta: 0.04,
-                }}
+                }           
+            }
             />
         <FAB style={styles.fab} icon="map-marker-radius" onPress={goToMyLocation}/>
         </SafeAreaView>
