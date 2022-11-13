@@ -6,6 +6,7 @@ import MainScreen from "./screens/MainScreen";
 import PostScreen from "./screens/PostScreen";
 import LoginScreen from "./screens/LoginScreen";
 import { useFonts } from "expo-font";
+import SignUpPage from "./screens/SignUpScreen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,7 +32,8 @@ export default function App() {
     >
       {/* <MainScreen /> */}
 
-      <LoginScreen />
+      {/* <LoginScreen /> */}
+      <SignUpPage />
     </View>
   );
 }

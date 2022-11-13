@@ -178,5 +178,4 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginTop: 100,
   },
-  loginBox: {},
 });
