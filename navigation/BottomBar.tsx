@@ -8,6 +8,7 @@ import LoginScreen from "../screens/LoginScreen";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
+import { View, StyleSheet } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +18,16 @@ const BottomBar = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: { backgroundColor: "#AD40AF" },
+        tabBarStyle: {
+          backgroundColor: "#AD40AF",
+          position: "absolute",
+          bottom: 25,
+          left: 20,
+          right: 20,
+          elevation: 0,
+          borderRadius: 15,
+          height: 80,
+        },
         tabBarInactiveTintColor: "#fff",
         tabBarActiveTintColor: "yellow",
       }}
@@ -25,12 +35,11 @@ const BottomBar = () => {
       <Tab.Screen
         name="Home"
         component={MainScreen}
-        options={({ route }) => ({
-          tabBarStyle: {
-            backgroundColor: "#AD40AF",
-          },
+        options={() => ({
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
+            <View style={styles.iconView}>
+              <Ionicons name="home-outline" color={color} size={size} />
+            </View>
           ),
         })}
       />
@@ -38,10 +47,11 @@ const BottomBar = () => {
         name="Post"
         component={PostScreen}
         options={{
-          tabBarBadge: 3,
           tabBarBadgeStyle: { backgroundColor: "yellow" },
           tabBarIcon: ({ color, size }) => (
-            <Feather name="shopping-bag" color={color} size={size} />
+            <View style={styles.iconView}>
+              <Feather name="plus-circle" color={color} size={50} />
+            </View>
           ),
         }}
       />
@@ -50,7 +60,9 @@ const BottomBar = () => {
         component={LoginScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart-outline" color={color} size={size} />
+            <View style={styles.iconView}>
+              <Feather name="user" color={color} size={size} />
+            </View>
           ),
         }}
       />
@@ -59,3 +71,11 @@ const BottomBar = () => {
 };
 
 export default BottomBar;
+
+const styles = StyleSheet.create({
+  iconView: {
+    alignItems: "center",
+    justifyContent: "center",
+    top: 15,
+  },
+});
