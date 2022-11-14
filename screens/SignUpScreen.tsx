@@ -129,6 +129,19 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
         />
 
         <InputField
+          label={"Phone Number"}
+          icon={
+            <MaterialIcons
+              name="phone"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
+          }
+          keyboardType="phone-pad"
+        />
+
+        <InputField
           label={"Password"}
           icon={
             <Ionicons
