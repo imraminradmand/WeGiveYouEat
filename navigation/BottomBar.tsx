@@ -6,7 +6,6 @@ import MainScreen from "../screens/MainScreen";
 import PostScreen from "../screens/PostScreen";
 import AuthStack from "./AuthNavigator";
 
-import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
 import { View, StyleSheet } from "react-native";
 
@@ -38,7 +37,7 @@ const BottomBar = () => {
         options={() => ({
           tabBarIcon: ({ color, size }) => (
             <View style={styles.iconView}>
-              <Ionicons name="home-outline" color={color} size={size} />
+              <Feather name="map" color={color} size={size} />
             </View>
           ),
         })}
