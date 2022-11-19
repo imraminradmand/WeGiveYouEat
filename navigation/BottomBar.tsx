@@ -4,7 +4,7 @@ import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 import MainScreen from "../screens/MainScreen";
 import PostScreen from "../screens/PostScreen";
-import AuthStack from "./AuthNavigator";
+import AuthStack from "../navigation/AuthNavigator";
 
 import Feather from "react-native-vector-icons/Feather";
 import { View, StyleSheet } from "react-native";
