@@ -12,7 +12,7 @@ import CustomButton from "../components/CustomButton";
 import { useState } from "react";
 
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState("");
@@ -20,9 +20,14 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        alert(user);
+      .then(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
+            navigation.navigate("Home");
+          }
+        });
+
+        return unsubscribe;
       })
       .catch((error) => {
         alert(error.message);
