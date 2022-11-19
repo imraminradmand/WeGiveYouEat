@@ -18,7 +18,7 @@ import {
   import InputField from "../components/InputField";
   import CustomButton from "../components/CustomButton";
   
-  const LoginScreen = ({ navigation }: { navigation: any }) => {
+  const AccountDetails = ({ navigation }: { navigation: any }) => {
     return (
       <SafeAreaView style={styles.backg}>
         <View style={{ paddingHorizontal: 50, marginTop: 50 }}>
@@ -238,7 +238,7 @@ import {
     );
   };
   
-  export default LoginScreen;
+  export default AccountDetails;
   
   const styles = StyleSheet.create({
     backg:{
