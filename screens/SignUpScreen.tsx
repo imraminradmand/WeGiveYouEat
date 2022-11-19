@@ -18,10 +18,13 @@ import logo from "../assets/loginPage/Logo.png";
 import apple from "../assets/loginPage/apple.png";
 import google from "../assets/loginPage/google.png";
 import ms from "../assets/loginPage/MS.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { auth, db, userRef } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { addDoc, getDocs } from "firebase/firestore";
 
 const SignUpScreen = ({ navigation }: { navigation: any }) => {
@@ -30,6 +33,16 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       navigation.navigate("Home");
+  //     }
+  //   });
+
+  //   return unsubscribe;
+  // }, []);
 
   const registerUser = () => {
     const validEmail = email.match(
@@ -59,17 +72,13 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
           });
         })
         .then(() => {
-          getDocs(userRef)
-            .then((snapshot) => {
-              let user: any = [];
-              snapshot.docs.forEach((doc) => {
-                user.push({ ...doc.data() });
-              });
-              alert(user);
-            })
-            .catch((err) => {
-              alert(err);
-            });
+          const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+              navigation.navigate("Home");
+            }
+          });
+
+          return unsubscribe;
         })
         .catch((err) => {
           alert(err);
