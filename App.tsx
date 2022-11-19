@@ -27,8 +27,8 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer onReady={onLayoutRootView}>
-      <BottomBar />
-    </NavigationContainer>
+    <View>
+      <Text>Test</Text>
+    </View>
   );
 }
