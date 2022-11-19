@@ -1,10 +1,7 @@
 ### General Information
-* Reference to issue (use the '#' character and it will show you the open issues) :
-* What changes have you made?
+* **Reference to issue**: resolves #<issue_number>
 
-### Unit testing
-* Have you written unit tests?
-* Do all unit tests cases pass?
+* **Chnages made**: <describe what you did>
 
 ### Misc
 * Anything the reviewer should be aware of?
