@@ -133,7 +133,7 @@ import {
             fontSize: 16,
             fontWeight: "500",
             color: "black",
-            marginLeft: 10
+            marginLeft: 10 
             }}
             >test@email.com</Text>
             <View style={{
