@@ -1,4 +1,14 @@
-import { View, Dimensions, StyleSheet, Text, SafeAreaView, ScrollView, TextInput, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Dimensions,
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  TextInput,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import InputField from "../components/InputField";
@@ -9,8 +19,10 @@ import apple from "../assets/loginPage/apple.png";
 import google from "../assets/loginPage/google.png";
 import ms from "../assets/loginPage/MS.png";
 import { useState } from "react";
-import firebase from "firebase/compat/app";
-import "firebase/auth";
+
+import { auth, db, userRef } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { addDoc, getDocs } from "firebase/firestore";
 
 const SignUpScreen = ({ navigation }: { navigation: any }) => {
   const [fullName, setFullName] = useState("");
@@ -19,37 +31,62 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const registerUser = async (fullName: string, email: string, phoneNumber: string, password: string, confirmPassword: string) => {
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
+  const registerUser = () => {
+    const validEmail = email.match(
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+    const validPhone = phoneNumber.match(
+      /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
+    );
+
+    if (!validEmail) {
+      alert("Email not valid, try again");
       return;
     }
-    try {
-      await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
+
+    if (!validPhone) {
+      alert("Phone number is not in the correct format");
+      return;
+    }
+
+    if (password === confirmPassword) {
+      createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
-          firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid).set({
-            fullName,
-            email,
-            phoneNumber,
+          addDoc(userRef, {
+            fullName: fullName,
+            email: email,
+            phone: phoneNumber,
           });
         })
         .then(() => {
-          alert("user registered successfully");
+          getDocs(userRef)
+            .then((snapshot) => {
+              let user: any = [];
+              snapshot.docs.forEach((doc) => {
+                user.push({ ...doc.data() });
+              });
+              alert(user);
+            })
+            .catch((err) => {
+              alert(err);
+            });
         })
-        .catch((error) => {
-          alert(error.message);
+        .catch((err) => {
+          alert(err);
         });
-    } catch (error) {
-      alert(error);
+      return;
+    } else {
+      alert("Passwords do not match");
     }
   };
 
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 25, marginTop: 50 }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ paddingHorizontal: 25, marginTop: 50 }}
+        >
           <View style={{ alignItems: "center" }}>
             <Image source={logo} style={styles.logo} />
           </View>
@@ -86,7 +123,10 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
                 marginRight: 5,
               }}
             >
-              <Image source={google} style={{ height: 24, width: 24, resizeMode: "contain" }} />
+              <Image
+                source={google}
+                style={{ height: 24, width: 24, resizeMode: "contain" }}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {}}
@@ -99,7 +139,10 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
                 marginRight: 5,
               }}
             >
-              <Image source={apple} style={{ height: 24, width: 24, resizeMode: "contain" }} />
+              <Image
+                source={apple}
+                style={{ height: 24, width: 24, resizeMode: "contain" }}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {}}
@@ -111,11 +154,18 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
                 paddingVertical: 10,
               }}
             >
-              <Image source={ms} style={{ height: 24, width: 24, resizeMode: "contain" }} />
+              <Image
+                source={ms}
+                style={{ height: 24, width: 24, resizeMode: "contain" }}
+              />
             </TouchableOpacity>
           </View>
 
-          <Text style={{ textAlign: "center", color: "#666", marginBottom: 30 }}>Or, register with email ...</Text>
+          <Text
+            style={{ textAlign: "center", color: "#666", marginBottom: 30 }}
+          >
+            Or, register with email ...
+          </Text>
 
           <View
             style={{
@@ -126,8 +176,18 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               marginBottom: 25,
             }}
           >
-            <Ionicons name="person-outline" size={20} color="#666" style={{ marginRight: 5 }} />
-            <TextInput placeholder={"Full Name"} style={{ flex: 1, paddingVertical: 0 }} onChangeText={setFullName} autoCorrect={false} />
+            <Ionicons
+              name="person-outline"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
+            <TextInput
+              placeholder={"Full Name"}
+              style={{ flex: 1, paddingVertical: 0 }}
+              onChangeText={setFullName}
+              autoCorrect={false}
+            />
           </View>
 
           <View
@@ -139,8 +199,18 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               marginBottom: 25,
             }}
           >
-            <MaterialIcons name="alternate-email" size={20} color="#666" style={{ marginRight: 5 }} />
-            <TextInput placeholder={"Email"} style={{ flex: 1, paddingVertical: 0 }} keyboardType="email-address" onChangeText={setEmail} />
+            <MaterialIcons
+              name="alternate-email"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
+            <TextInput
+              placeholder={"Email"}
+              style={{ flex: 1, paddingVertical: 0 }}
+              keyboardType="email-address"
+              onChangeText={setEmail}
+            />
           </View>
 
           <View
@@ -152,8 +222,18 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               marginBottom: 25,
             }}
           >
-            <MaterialIcons name="phone" size={20} color="#666" style={{ marginRight: 5 }} />
-            <TextInput placeholder={"Phone Number"} style={{ flex: 1, paddingVertical: 0 }} keyboardType="phone-pad" onChangeText={setPhoneNumber} />
+            <MaterialIcons
+              name="phone"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
+            <TextInput
+              placeholder={"(###)-###-####"}
+              style={{ flex: 1, paddingVertical: 0 }}
+              keyboardType="phone-pad"
+              onChangeText={setPhoneNumber}
+            />
           </View>
 
           <View
@@ -165,8 +245,18 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               marginBottom: 25,
             }}
           >
-            <Ionicons name="ios-lock-closed-outline" size={20} color="#666" style={{ marginRight: 5 }} />
-            <TextInput placeholder={"Password"} style={{ flex: 1, paddingVertical: 0 }} secureTextEntry={true} onChangeText={setPassword} />
+            <Ionicons
+              name="ios-lock-closed-outline"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
+            <TextInput
+              placeholder={"Password"}
+              style={{ flex: 1, paddingVertical: 0 }}
+              secureTextEntry={true}
+              onChangeText={setPassword}
+            />
           </View>
 
           <View
@@ -178,14 +268,24 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               marginBottom: 25,
             }}
           >
-            <Ionicons name="ios-lock-closed-outline" size={20} color="#666" style={{ marginRight: 5 }} />
-            <TextInput placeholder={"Confirm password"} style={{ flex: 1, paddingVertical: 0 }} secureTextEntry={true} onChangeText={setConfirmPassword} />
+            <Ionicons
+              name="ios-lock-closed-outline"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
+            <TextInput
+              placeholder={"Confirm password"}
+              style={{ flex: 1, paddingVertical: 0 }}
+              secureTextEntry={true}
+              onChangeText={setConfirmPassword}
+            />
           </View>
 
           <CustomButton
             label={"Register"}
             onPress={() => {
-              registerUser(fullName, email, phoneNumber, password, confirmPassword);
+              registerUser();
             }}
           />
 
@@ -202,7 +302,10 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
                 navigation.goBack();
               }}
             >
-              <Text style={{ color: "#AD40AF", fontWeight: "700" }}> Login</Text>
+              <Text style={{ color: "#AD40AF", fontWeight: "700" }}>
+                {" "}
+                Login
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
