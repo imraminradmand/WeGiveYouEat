@@ -11,6 +11,8 @@ import {
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+import accountIcon from "../assets/AccountAvatar.png";
+
 import { useState, useEffect } from "react";
 import CustomButton from "../components/CustomButton";
 import { auth, db } from "../firebase";
@@ -49,10 +51,6 @@ const AccountDetails = ({
   return (
     <SafeAreaView style={styles.backg}>
       <View style={{ paddingHorizontal: 50, marginTop: 50 }}>
-        {/* <View style={{ alignItems: "center" }}>
-            <Image source={logo} style={styles.logo} />
-          </View> */}
-
         <Text
           style={{
             fontFamily: "Roboto-Regular",
@@ -66,7 +64,9 @@ const AccountDetails = ({
         >
           Account Details
         </Text>
-
+        <View style={{ alignItems: "center" }}>
+          <Image source={accountIcon} style={styles.avatar} />
+        </View>
         <View
           style={{
             flexDirection: "row",
@@ -109,7 +109,7 @@ const AccountDetails = ({
             fontSize: 16,
             fontWeight: "500",
             color: "black",
-            marginLeft: 10,
+            top: 5,
           }}
         >
           {fullName}
@@ -157,7 +157,7 @@ const AccountDetails = ({
             fontSize: 16,
             fontWeight: "500",
             color: "black",
-            marginLeft: 10,
+            top: 5,
           }}
         >
           {email}
@@ -204,13 +204,13 @@ const AccountDetails = ({
             fontSize: 16,
             fontWeight: "500",
             color: "black",
-            marginLeft: 10,
+            top: 5,
           }}
         >
           {phoneNumber}
         </Text>
 
-        <TouchableOpacity>
+        <TouchableOpacity style={{ top: 20 }}>
           <Text
             style={{
               fontFamily: "Roboto-Regular",
@@ -219,40 +219,15 @@ const AccountDetails = ({
               color: "red",
               marginBottom: 30,
               marginTop: 20,
+              alignSelf: "center",
             }}
           >
             Delete Account
           </Text>
         </TouchableOpacity>
-        {/* <InputField
-            label={"Email ID"}
-            icon={
-              <MaterialIcons
-                name="alternate-email"
-                size={20}
-                color="#666"
-                style={{ marginRight: 5 }}
-              />
-            }
-            keyboardType="email-address"
-          />
-  
-          <InputField
-            label={"Password"}
-            icon={
-              <Ionicons
-                name="ios-lock-closed-outline"
-                size={20}
-                color="#666"
-                style={{ marginRight: 5 }}
-              />
-            }
-            inputType="password"
-            fieldButtonLabel={"Forgot?"}
-            fieldButtonFunction={() => {}}
-          /> */}
-
-        <CustomButton label={"Sign Out"} onPress={handleLogOut} />
+        <View style={{ top: 10 }}>
+          <CustomButton label={"Sign Out"} onPress={handleLogOut} />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -287,5 +262,9 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginTop: 100,
+  },
+  avatar: {
+    width: 150,
+    height: 150,
   },
 });
