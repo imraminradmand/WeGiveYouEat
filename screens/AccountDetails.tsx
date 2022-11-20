@@ -31,6 +31,13 @@ const AccountDetails = ({
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [postName, setPostName] = useState([]);
+  const [postPhoneNumber, setPostPhoneNumber] = useState([]);
+  const [postAddress, setPostAddress] = useState([]);
+  const [postDesc, setPostDesc] = useState([]);
+  const [postCategory, setPostCategory] = useState([]);
+
   const { authParam } = route.params;
 
   useEffect(() => {
@@ -41,6 +48,15 @@ const AccountDetails = ({
       setFullName(res?.fullName);
       setPhoneNumber(res?.phone);
     });
+  }, []);
+
+  useEffect(() => {
+    const getPostDoc = doc(db, "posts", "testPost");
+    getDoc(getPostDoc)
+      .then((snapshot) => {
+        console.log(snapshot.data());
+      })
+      .catch((err) => alert(err));
   }, []);
 
   const handleLogOut = () => {
@@ -210,6 +226,22 @@ const AccountDetails = ({
           {phoneNumber}
         </Text>
 
+        <Text
+          style={{
+            fontFamily: "Roboto-Regular",
+            fontSize: 22,
+            fontWeight: "500",
+            color: "#333",
+            marginBottom: 30,
+            marginTop: 50,
+            alignSelf: "center",
+          }}
+        >
+          My Posts
+        </Text>
+
+        <View></View>
+
         <TouchableOpacity style={{ top: 20 }}>
           <Text
             style={{
@@ -264,7 +296,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   avatar: {
-    width: 150,
-    height: 150,
+    width: 75,
+    height: 75,
   },
 });
