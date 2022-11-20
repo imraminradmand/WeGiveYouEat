@@ -11,18 +11,26 @@ import AccountDetails from "../screens/AccountDetails";
 const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
-  const [isAuth, setIsAuth] = useState(false);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  function handleAuthChange(user: any) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user: any) => {
-      if (user) {
-        setIsAuth(true);
-      }
+    const subscriber = onAuthStateChanged(auth, (user) => {
+      handleAuthChange(user);
     });
+    return subscriber; // unsubscribe on unmount
   }, []);
+
+  if (initializing) return null;
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {!isAuth ? (
+      {!user ? (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="SignUp" component={SignUpScreen} />
