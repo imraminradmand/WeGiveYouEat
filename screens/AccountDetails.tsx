@@ -267,7 +267,7 @@ const AccountDetails = ({
         {userPosts && (
           <ScrollView>
             <FlatList
-              data={CATEGORIES}
+              data={userPosts}
               keyExtractor={(item) => item.phoneNumber}
               renderItem={renderItem}
             />
@@ -332,12 +332,13 @@ const styles = StyleSheet.create({
     height: 75,
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    backgroundColor: "#f9c2ff", // colour for my posts
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderRadius: 15,
   },
   title: {
-    fontSize: 32,
+    fontSize: 20,
   },
 });
