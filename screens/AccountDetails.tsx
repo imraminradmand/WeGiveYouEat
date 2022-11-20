@@ -11,8 +11,7 @@ import {
   ListRenderItem,
   ScrollView,
 } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Feather from "react-native-vector-icons/Feather";
 
 import accountIcon from "../assets/AccountAvatar.png";
 import ItemCard from "../components/ItemCard";
@@ -56,6 +55,9 @@ const AccountDetails = ({
     return (
       <View style={styles.item}>
         <Text style={styles.title}>{data.postName}</Text>
+        <TouchableOpacity style={{ position: "absolute", top: 20, left: 250 }}>
+          <Feather name="x" color={"red"} size={25} />
+        </TouchableOpacity>
       </View>
     );
   };
@@ -265,13 +267,11 @@ const AccountDetails = ({
         </Text>
 
         {userPosts && (
-          <ScrollView>
-            <FlatList
-              data={userPosts}
-              keyExtractor={(item) => item.phoneNumber}
-              renderItem={renderItem}
-            />
-          </ScrollView>
+          <FlatList
+            data={userPosts}
+            keyExtractor={(item) => item.phoneNumber}
+            renderItem={renderItem}
+          />
         )}
 
         <TouchableOpacity style={{ top: 20 }}>
@@ -337,8 +337,14 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 15,
+    flexDirection: "row",
   },
   title: {
     fontSize: 20,
+  },
+  iconView: {
+    alignItems: "center",
+    justifyContent: "center",
+    top: 15,
   },
 });
