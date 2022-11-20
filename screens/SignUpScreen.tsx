@@ -25,7 +25,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { addDoc, getDocs } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 
 const SignUpScreen = ({ navigation }: { navigation: any }) => {
   const [fullName, setFullName] = useState("");
@@ -61,11 +61,16 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
       alert("Phone number is not in the correct format");
       return;
     }
-
+    let uid = "";
     if (password === confirmPassword) {
       createUserWithEmailAndPassword(auth, email, password)
+        .then((data) => {
+          uid = data.user.uid;
+        })
         .then(() => {
-          addDoc(userRef, {
+          console.log(uid);
+          const dbDoc = doc(db, "users", uid);
+          setDoc(dbDoc, {
             fullName: fullName,
             email: email,
             phone: phoneNumber,
@@ -219,6 +224,7 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               style={{ flex: 1, paddingVertical: 0 }}
               keyboardType="email-address"
               onChangeText={setEmail}
+              autoCorrect={false}
             />
           </View>
 

@@ -15,11 +15,30 @@ import apple from "../assets/loginPage/apple.png";
 import google from "../assets/loginPage/google.png";
 import ms from "../assets/loginPage/MS.png";
 
+import { useState, useEffect } from "react";
 import CustomButton from "../components/CustomButton";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const AccountDetails = ({ navigation }: { navigation: any }) => {
+  const [userId, setUserId] = useState();
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  useEffect(() => {
+    const subscriber = onAuthStateChanged(auth, (user: any) => {
+      setUserId(user.uid);
+    });
+    return subscriber;
+  }, []);
+
+  useEffect(() => {
+    alert(userId);
+  }, []);
+
   const handleLogOut = () => {
     signOut(auth).then(() => {
       navigation.navigate("Home");
