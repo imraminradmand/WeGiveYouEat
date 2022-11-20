@@ -14,7 +14,6 @@ import {
 import Feather from "react-native-vector-icons/Feather";
 
 import accountIcon from "../assets/AccountAvatar.png";
-import ItemCard from "../components/ItemCard";
 
 import { useState, useEffect } from "react";
 import CustomButton from "../components/CustomButton";
@@ -23,19 +22,6 @@ import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 LogBox.ignoreAllLogs();
-
-export const CATEGORIES: any[] = [
-  { id: "c1", title: "Italian", bg: "#f5428d" },
-  { id: "c2", title: "hungrt", bg: "#f5428d" },
-  { id: "c2", title: "hungrt", bg: "#f5428d" },
-  { id: "c2", title: "hungrt", bg: "#f5428d" },
-  { id: "c2", title: "hungrt", bg: "#f5428d" },
-  { id: "c1", title: "Italian", bg: "#f5428d" },
-  { id: "c2", title: "hungrt", bg: "#f5428d" },
-  { id: "c2", title: "hungrt", bg: "#f5428d" },
-  { id: "c2", title: "hungrt", bg: "#f5428d" },
-  { id: "c2", title: "hungrt", bg: "#f5428d" },
-];
 
 const AccountDetails = ({
   route,
