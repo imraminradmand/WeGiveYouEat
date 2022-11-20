@@ -51,11 +51,19 @@ const AccountDetails = ({
   const [userPosts, setUserPosts] = useState<any[]>([]);
   const { authParam } = route.params;
 
+  const removePost = (name: string) => {
+    alert(name);
+  };
   const Item = ({ data }: { data: any }) => {
     return (
       <View style={styles.item}>
         <Text style={styles.title}>{data.postName}</Text>
-        <TouchableOpacity style={{ position: "absolute", top: 20, left: 250 }}>
+        <TouchableOpacity
+          style={{ position: "absolute", top: 20, left: 250 }}
+          onPress={() => {
+            removePost(data.postName);
+          }}
+        >
           <Feather name="x" color={"red"} size={25} />
         </TouchableOpacity>
       </View>
