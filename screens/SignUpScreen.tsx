@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 
 import logo from "../assets/loginPage/Logo.png";
@@ -33,16 +32,6 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       navigation.navigate("Home");
-  //     }
-  //   });
-
-  //   return unsubscribe;
-  // }, []);
 
   const registerUser = () => {
     const validEmail = email.match(
@@ -68,7 +57,6 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
           uid = data.user.uid;
         })
         .then(() => {
-          console.log(uid);
           const dbDoc = doc(db, "users", uid);
           setDoc(dbDoc, {
             fullName: fullName,

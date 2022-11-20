@@ -6,37 +6,39 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  LogBox,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import logo from "../assets/loginPage/Logo.png";
-import apple from "../assets/loginPage/apple.png";
-import google from "../assets/loginPage/google.png";
-import ms from "../assets/loginPage/MS.png";
-
 import { useState, useEffect } from "react";
 import CustomButton from "../components/CustomButton";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-const AccountDetails = ({ navigation }: { navigation: any }) => {
-  const [userId, setUserId] = useState();
+LogBox.ignoreAllLogs();
+
+const AccountDetails = ({
+  route,
+  navigation,
+}: {
+  navigation: any;
+  route: any;
+}) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const { authParam } = route.params;
 
   useEffect(() => {
-    const subscriber = onAuthStateChanged(auth, (user: any) => {
-      setUserId(user.uid);
+    const getRefDoc = doc(db, "users", authParam.uid);
+    getDoc(getRefDoc).then((snapshot) => {
+      const res = snapshot.data();
+      setEmail(res?.email);
+      setFullName(res?.fullName);
+      setPhoneNumber(res?.phone);
     });
-    return subscriber;
-  }, []);
-
-  useEffect(() => {
-    alert(userId);
   }, []);
 
   const handleLogOut = () => {
@@ -110,7 +112,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
             marginLeft: 10,
           }}
         >
-          Test Name
+          {fullName}
         </Text>
 
         <View
@@ -158,7 +160,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
             marginLeft: 10,
           }}
         >
-          test@email.com
+          {email}
         </Text>
         <View
           style={{
@@ -205,7 +207,7 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
             marginLeft: 10,
           }}
         >
-          403-597-9824
+          {phoneNumber}
         </Text>
 
         <TouchableOpacity>
