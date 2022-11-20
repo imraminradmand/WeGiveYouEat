@@ -7,11 +7,15 @@ import {
   Image,
   TouchableOpacity,
   LogBox,
+  FlatList,
+  ListRenderItem,
+  ScrollView,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import accountIcon from "../assets/AccountAvatar.png";
+import ItemCard from "../components/ItemCard";
 
 import { useState, useEffect } from "react";
 import CustomButton from "../components/CustomButton";
@@ -20,6 +24,19 @@ import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 LogBox.ignoreAllLogs();
+
+export const CATEGORIES: any[] = [
+  { id: "c1", title: "Italian", bg: "#f5428d" },
+  { id: "c2", title: "hungrt", bg: "#f5428d" },
+  { id: "c2", title: "hungrt", bg: "#f5428d" },
+  { id: "c2", title: "hungrt", bg: "#f5428d" },
+  { id: "c2", title: "hungrt", bg: "#f5428d" },
+  { id: "c1", title: "Italian", bg: "#f5428d" },
+  { id: "c2", title: "hungrt", bg: "#f5428d" },
+  { id: "c2", title: "hungrt", bg: "#f5428d" },
+  { id: "c2", title: "hungrt", bg: "#f5428d" },
+  { id: "c2", title: "hungrt", bg: "#f5428d" },
+];
 
 const AccountDetails = ({
   route,
@@ -32,13 +49,18 @@ const AccountDetails = ({
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const [postName, setPostName] = useState([]);
-  const [postPhoneNumber, setPostPhoneNumber] = useState([]);
-  const [postAddress, setPostAddress] = useState([]);
-  const [postDesc, setPostDesc] = useState([]);
-  const [postCategory, setPostCategory] = useState([]);
-
+  const [userPosts, setUserPosts] = useState<any[]>([]);
   const { authParam } = route.params;
+
+  const Item = ({ data }: { data: any }) => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.title}>{data.postName}</Text>
+      </View>
+    );
+  };
+
+  const renderItem: ListRenderItem<any> = ({ item }) => <Item data={item} />;
 
   useEffect(() => {
     const getRefDoc = doc(db, "users", authParam.uid);
@@ -54,7 +76,8 @@ const AccountDetails = ({
     const getPostDoc = doc(db, "posts", "testPost");
     getDoc(getPostDoc)
       .then((snapshot) => {
-        console.log(snapshot.data());
+        const res = snapshot.data();
+        setUserPosts(res?.userPosts);
       })
       .catch((err) => alert(err));
   }, []);
@@ -64,8 +87,9 @@ const AccountDetails = ({
       navigation.navigate("Home");
     });
   };
+
   return (
-    <SafeAreaView style={styles.backg}>
+    <ScrollView style={styles.backg}>
       <View style={{ paddingHorizontal: 50, marginTop: 50 }}>
         <Text
           style={{
@@ -240,7 +264,15 @@ const AccountDetails = ({
           My Posts
         </Text>
 
-        <View></View>
+        {userPosts && (
+          <ScrollView>
+            <FlatList
+              data={CATEGORIES}
+              keyExtractor={(item) => item.phoneNumber}
+              renderItem={renderItem}
+            />
+          </ScrollView>
+        )}
 
         <TouchableOpacity style={{ top: 20 }}>
           <Text
@@ -257,11 +289,11 @@ const AccountDetails = ({
             Delete Account
           </Text>
         </TouchableOpacity>
-        <View style={{ top: 10 }}>
+        <View style={{ top: 10, marginBottom: "40%" }}>
           <CustomButton label={"Sign Out"} onPress={handleLogOut} />
         </View>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
@@ -298,5 +330,14 @@ const styles = StyleSheet.create({
   avatar: {
     width: 75,
     height: 75,
+  },
+  item: {
+    backgroundColor: "#f9c2ff",
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
   },
 });
