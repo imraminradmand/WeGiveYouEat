@@ -16,7 +16,8 @@ const startServer = async (_) => {
   const routes = require("./src/routes");
   routes.register(app, db);
 
-  const PORT = process.env.PORT || 8081;
+
+  const PORT = process.env.PORT || 8080;
   const server = app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}...`);
   });
