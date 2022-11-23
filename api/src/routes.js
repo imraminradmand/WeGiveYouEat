@@ -61,6 +61,26 @@ module.exports.register = (app, database) => {
 
     })
 
+    // Get user info given uid 
+    app.get("/api/users/:utid", async (req, res) => {
+        let id = req.params.uid;
+        let query;
+
+        query = database.query('SELECT * FROM posts WHERE uid like?', [id]);
+        const records = await query;
+        if (JSON.stringify(records) === '[]') {
+            res.status(404).send({
+                success: false,
+                error: {
+                    message: "No user found"
+                }
+            })
+        } else {
+            res.status(200).send(JSON.stringify(records)).end();
+        }
+
+    })
+
     // Add a user to the users table
     app.post('/api/users', async (req, res) => {
         let uid = req.body.uid;
