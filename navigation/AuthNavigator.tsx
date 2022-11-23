@@ -37,7 +37,11 @@ const AuthStack = () => {
         </>
       ) : (
         <>
-          <Stack.Screen name="Account" component={AccountDetails} />
+          <Stack.Screen
+            name="Account"
+            component={AccountDetails}
+            initialParams={{ authParam: user }}
+          />
         </>
       )}
     </Stack.Navigator>

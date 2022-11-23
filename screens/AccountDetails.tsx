@@ -6,51 +6,86 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  LogBox,
+  FlatList,
+  ListRenderItem,
+  ScrollView,
 } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Feather from "react-native-vector-icons/Feather";
 
-import logo from "../assets/loginPage/Logo.png";
-import apple from "../assets/loginPage/apple.png";
-import google from "../assets/loginPage/google.png";
-import ms from "../assets/loginPage/MS.png";
+import accountIcon from "../assets/AccountAvatar.png";
 
 import { useState, useEffect } from "react";
 import CustomButton from "../components/CustomButton";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  deletePost,
+  getAllPosts,
+  getPostFromId,
+  getUserPosts,
+} from "../apiCalls/calls";
+import { err } from "react-native-svg/lib/typescript/xml";
 
-const AccountDetails = ({ navigation }: { navigation: any }) => {
-  const [userId, setUserId] = useState();
+LogBox.ignoreAllLogs();
+
+const AccountDetails = ({
+  route,
+  navigation,
+}: {
+  navigation: any;
+  route: any;
+}) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  useEffect(() => {
-    const subscriber = onAuthStateChanged(auth, (user: any) => {
-      setUserId(user.uid);
-    });
-    return subscriber;
-  }, []);
+  const [userPosts, setUserPosts] = useState<any[]>([]);
+  const [refreshData, setRefreshData] = useState(false);
+  const { authParam } = route.params;
+
+  const removePost = (id: number) => {
+    deletePost(id);
+    setRefreshData(true);
+  };
+
+  const Item = ({ data }: { data: any }) => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.title}>{data.postName}</Text>
+        <TouchableOpacity
+          style={{ position: "absolute", top: 20, left: 250 }}
+          onPress={() => {
+            removePost(data.id);
+          }}
+        >
+          <Feather name="x" color={"red"} size={25} />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const renderItem: ListRenderItem<any> = ({ item }) => <Item data={item} />;
 
   useEffect(() => {
-    alert(userId);
-  }, []);
+    getUserPosts(authParam.uid)
+      .then((data) => setUserPosts(data))
+      .catch((err) => {
+        setUserPosts([]);
+      });
+  }, [refreshData]);
+
+  useEffect(() => {}, []);
 
   const handleLogOut = () => {
     signOut(auth).then(() => {
       navigation.navigate("Home");
     });
   };
-  return (
-    <SafeAreaView style={styles.backg}>
-      <View style={{ paddingHorizontal: 50, marginTop: 50 }}>
-        {/* <View style={{ alignItems: "center" }}>
-            <Image source={logo} style={styles.logo} />
-          </View> */}
 
+  return (
+    <ScrollView style={styles.backg}>
+      <View style={{ paddingHorizontal: 50, marginTop: 50 }}>
         <Text
           style={{
             fontFamily: "Roboto-Regular",
@@ -64,7 +99,9 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
         >
           Account Details
         </Text>
-
+        <View style={{ alignItems: "center" }}>
+          <Image source={accountIcon} style={styles.avatar} />
+        </View>
         <View
           style={{
             flexDirection: "row",
@@ -107,10 +144,10 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
             fontSize: 16,
             fontWeight: "500",
             color: "black",
-            marginLeft: 10,
+            top: 5,
           }}
         >
-          Test Name
+          {fullName}
         </Text>
 
         <View
@@ -155,10 +192,10 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
             fontSize: 16,
             fontWeight: "500",
             color: "black",
-            marginLeft: 10,
+            top: 5,
           }}
         >
-          test@email.com
+          {email}
         </Text>
         <View
           style={{
@@ -202,13 +239,29 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
             fontSize: 16,
             fontWeight: "500",
             color: "black",
-            marginLeft: 10,
+            top: 5,
           }}
         >
-          403-597-9824
+          {phoneNumber}
         </Text>
 
-        <TouchableOpacity>
+        <Text
+          style={{
+            fontFamily: "Roboto-Regular",
+            fontSize: 22,
+            fontWeight: "500",
+            color: "#333",
+            marginBottom: 30,
+            marginTop: 50,
+            alignSelf: "center",
+          }}
+        >
+          My Posts
+        </Text>
+
+        {userPosts && <FlatList data={userPosts} renderItem={renderItem} />}
+
+        <TouchableOpacity style={{ top: 20 }}>
           <Text
             style={{
               fontFamily: "Roboto-Regular",
@@ -217,42 +270,17 @@ const AccountDetails = ({ navigation }: { navigation: any }) => {
               color: "red",
               marginBottom: 30,
               marginTop: 20,
+              alignSelf: "center",
             }}
           >
             Delete Account
           </Text>
         </TouchableOpacity>
-        {/* <InputField
-            label={"Email ID"}
-            icon={
-              <MaterialIcons
-                name="alternate-email"
-                size={20}
-                color="#666"
-                style={{ marginRight: 5 }}
-              />
-            }
-            keyboardType="email-address"
-          />
-  
-          <InputField
-            label={"Password"}
-            icon={
-              <Ionicons
-                name="ios-lock-closed-outline"
-                size={20}
-                color="#666"
-                style={{ marginRight: 5 }}
-              />
-            }
-            inputType="password"
-            fieldButtonLabel={"Forgot?"}
-            fieldButtonFunction={() => {}}
-          /> */}
-
-        <CustomButton label={"Sign Out"} onPress={handleLogOut} />
+        <View style={{ top: 10, marginBottom: "40%" }}>
+          <CustomButton label={"Sign Out"} onPress={handleLogOut} />
+        </View>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
@@ -285,5 +313,25 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginTop: 100,
+  },
+  avatar: {
+    width: 75,
+    height: 75,
+  },
+  item: {
+    backgroundColor: "#f9c2ff", // colour for my posts
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 15,
+    flexDirection: "row",
+  },
+  title: {
+    fontSize: 20,
+  },
+  iconView: {
+    alignItems: "center",
+    justifyContent: "center",
+    top: 15,
   },
 });

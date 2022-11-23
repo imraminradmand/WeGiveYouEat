@@ -26,7 +26,7 @@ module.exports.register = (app, database) => {
         let id = req.params.userid;
         let query;
 
-        query = database.query('SELECT * FROM posts WHERE user_uid=?', [id]);
+        query = database.query('SELECT * FROM posts WHERE user_uid like ?', [id]);
         const records = await query;
         if (JSON.stringify(records) === '[]') {
             res.status(404).send({
@@ -53,6 +53,26 @@ module.exports.register = (app, database) => {
                 success: false,
                 error: {
                     message: "No post found for user"
+                }
+            })
+        } else {
+            res.status(200).send(JSON.stringify(records)).end();
+        }
+
+    })
+
+    // Get user info given uid 
+    app.get("/api/users/:utid", async (req, res) => {
+        let id = req.params.uid;
+        let query;
+
+        query = database.query('SELECT * FROM posts WHERE uid like?', [id]);
+        const records = await query;
+        if (JSON.stringify(records) === '[]') {
+            res.status(404).send({
+                success: false,
+                error: {
+                    message: "No user found"
                 }
             })
         } else {
