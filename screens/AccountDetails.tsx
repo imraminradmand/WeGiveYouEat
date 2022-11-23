@@ -33,13 +33,14 @@ const AccountDetails = ({
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [path1, setPath1] = useState("");
+  const [path2, setPath2] = useState("");
 
   const [userPosts, setUserPosts] = useState<any[]>([]);
   const { authParam } = route.params;
 
-  const removePost = (name: string) => {
-    alert(name);
-  };
+  const removePost = (name: string) => {};
+
   const Item = ({ data }: { data: any }) => {
     return (
       <View style={styles.item}>
@@ -65,15 +66,21 @@ const AccountDetails = ({
       setEmail(res?.email);
       setFullName(res?.fullName);
       setPhoneNumber(res?.phone);
+      console.log(res?.posts);
+      setPath1(res?.posts[0]["_key"]["path"]["segments"][7]);
+      setPath2(res?.posts[0]["_key"]["path"]["segments"][8]);
     });
   }, []);
 
   useEffect(() => {
-    const getPostDoc = doc(db, "posts", "testPost");
-    getDoc(getPostDoc)
+    // const getPostDoc = doc(db, "posts", "testPost");
+    const paths = [authParam.uid, path1, path2];
+    const testPostDoc = doc(db, "posts", ...paths);
+    getDoc(testPostDoc)
       .then((snapshot) => {
         const res = snapshot.data();
-        setUserPosts(res?.userPosts);
+        // console.log(res);
+        // setUserPosts(res?.userPosts);
       })
       .catch((err) => alert(err));
   }, []);
@@ -260,13 +267,7 @@ const AccountDetails = ({
           My Posts
         </Text>
 
-        {userPosts && (
-          <FlatList
-            data={userPosts}
-            keyExtractor={(item) => item.phoneNumber}
-            renderItem={renderItem}
-          />
-        )}
+        {userPosts && <FlatList data={userPosts} renderItem={renderItem} />}
 
         <TouchableOpacity style={{ top: 20 }}>
           <Text
