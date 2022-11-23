@@ -25,6 +25,7 @@ import {
   getPostFromId,
   getUserPosts,
 } from "../apiCalls/calls";
+import { err } from "react-native-svg/lib/typescript/xml";
 
 LogBox.ignoreAllLogs();
 
@@ -40,10 +41,12 @@ const AccountDetails = ({
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const [userPosts, setUserPosts] = useState<any[]>([]);
+  const [refreshData, setRefreshData] = useState(false);
   const { authParam } = route.params;
 
   const removePost = (id: number) => {
     deletePost(id);
+    setRefreshData(true);
   };
 
   const Item = ({ data }: { data: any }) => {
@@ -65,8 +68,12 @@ const AccountDetails = ({
   const renderItem: ListRenderItem<any> = ({ item }) => <Item data={item} />;
 
   useEffect(() => {
-    getUserPosts(authParam.uid).then((data) => setUserPosts(data));
-  }, []);
+    getUserPosts(authParam.uid)
+      .then((data) => setUserPosts(data))
+      .catch((err) => {
+        setUserPosts([]);
+      });
+  }, [refreshData]);
 
   useEffect(() => {}, []);
 
