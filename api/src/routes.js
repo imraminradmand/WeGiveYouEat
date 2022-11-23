@@ -26,7 +26,7 @@ module.exports.register = (app, database) => {
         let id = req.params.userid;
         let query;
 
-        query = database.query('SELECT * FROM posts WHERE user_uid=?', [id]);
+        query = database.query('SELECT * FROM posts WHERE user_uid like ?', [id]);
         const records = await query;
         if (JSON.stringify(records) === '[]') {
             res.status(404).send({

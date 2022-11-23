@@ -17,9 +17,14 @@ import accountIcon from "../assets/AccountAvatar.png";
 
 import { useState, useEffect } from "react";
 import CustomButton from "../components/CustomButton";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  deletePost,
+  getAllPosts,
+  getPostFromId,
+  getUserPosts,
+} from "../apiCalls/calls";
 
 LogBox.ignoreAllLogs();
 
@@ -33,13 +38,13 @@ const AccountDetails = ({
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [path1, setPath1] = useState("");
-  const [path2, setPath2] = useState("");
 
   const [userPosts, setUserPosts] = useState<any[]>([]);
   const { authParam } = route.params;
 
-  const removePost = (name: string) => {};
+  const removePost = (id: number) => {
+    deletePost(id);
+  };
 
   const Item = ({ data }: { data: any }) => {
     return (
@@ -48,7 +53,7 @@ const AccountDetails = ({
         <TouchableOpacity
           style={{ position: "absolute", top: 20, left: 250 }}
           onPress={() => {
-            removePost(data.postName);
+            removePost(data.id);
           }}
         >
           <Feather name="x" color={"red"} size={25} />
@@ -60,30 +65,10 @@ const AccountDetails = ({
   const renderItem: ListRenderItem<any> = ({ item }) => <Item data={item} />;
 
   useEffect(() => {
-    const getRefDoc = doc(db, "users", authParam.uid);
-    getDoc(getRefDoc).then((snapshot) => {
-      const res = snapshot.data();
-      setEmail(res?.email);
-      setFullName(res?.fullName);
-      setPhoneNumber(res?.phone);
-      console.log(res?.posts);
-      setPath1(res?.posts[0]["_key"]["path"]["segments"][7]);
-      setPath2(res?.posts[0]["_key"]["path"]["segments"][8]);
-    });
+    getUserPosts(authParam.uid).then((data) => setUserPosts(data));
   }, []);
 
-  useEffect(() => {
-    // const getPostDoc = doc(db, "posts", "testPost");
-    const paths = [authParam.uid, path1, path2];
-    const testPostDoc = doc(db, "posts", ...paths);
-    getDoc(testPostDoc)
-      .then((snapshot) => {
-        const res = snapshot.data();
-        // console.log(res);
-        // setUserPosts(res?.userPosts);
-      })
-      .catch((err) => alert(err));
-  }, []);
+  useEffect(() => {}, []);
 
   const handleLogOut = () => {
     signOut(auth).then(() => {

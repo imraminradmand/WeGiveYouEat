@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://34.82.133.0:8081/api/";
+const URL = "http://34.82.133.0:8081/api";
 
 export const getAllPosts = async () => {
   const res = await axios.get(`${URL}/posts`);
@@ -12,7 +12,7 @@ export const getPostInfo = async (opt2: string) => {
   return res.data;
 };
 
-export const getUserPosts = async (uid: number) => {
+export const getUserPosts = async (uid: string) => {
   const res = await axios.get(`${URL}/posts/user/${uid}`);
   return res.data;
 };
