@@ -70,12 +70,6 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
     });
   };
 
-  const pressMarker = () => {
-    coordinates.map((i) => {
-      console.log(i);
-    });
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <MapView
@@ -106,7 +100,11 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
         </>
       </MapView>
 
-      <FAB style={styles.fab} icon="map-marker-radius" onPress={pressMarker} />
+      <FAB
+        style={styles.fab}
+        icon="map-marker-radius"
+        onPress={goToMyLocation}
+      />
     </SafeAreaView>
   );
 };
