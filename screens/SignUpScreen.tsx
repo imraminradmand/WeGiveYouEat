@@ -189,6 +189,8 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               style={{ flex: 1, paddingVertical: 0 }}
               onChangeText={setFullName}
               autoCorrect={false}
+              textContentType="name"
+              autoComplete="name"
             />
           </View>
 
@@ -213,6 +215,8 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               keyboardType="email-address"
               onChangeText={setEmail}
               autoCorrect={false}
+              textContentType="emailAddress"
+              autoComplete="email"
             />
           </View>
 
@@ -236,6 +240,8 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               style={{ flex: 1, paddingVertical: 0 }}
               keyboardType="phone-pad"
               onChangeText={setPhoneNumber}
+              textContentType="telephoneNumber"
+              autoComplete="tel"
             />
           </View>
 
@@ -259,6 +265,8 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               style={{ flex: 1, paddingVertical: 0 }}
               secureTextEntry={true}
               onChangeText={setPassword}
+              textContentType="password"
+              autoComplete="password"
             />
           </View>
 
@@ -282,6 +290,8 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
               style={{ flex: 1, paddingVertical: 0 }}
               secureTextEntry={true}
               onChangeText={setConfirmPassword}
+              textContentType="password"
+              autoComplete="password"
             />
           </View>
 

@@ -1,4 +1,13 @@
-import { TextInput, View, Dimensions, StyleSheet, Text, SafeAreaView, Image, TouchableOpacity } from "react-native";
+import {
+  TextInput,
+  View,
+  Dimensions,
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -63,8 +72,20 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
             marginBottom: 25,
           }}
         >
-          <MaterialIcons name="alternate-email" size={20} color="#666" style={{ marginRight: 5 }} />
-          <TextInput placeholder={"Email"} style={{ flex: 1, paddingVertical: 0 }} keyboardType="email-address" onChangeText={setEmail} />
+          <MaterialIcons
+            name="alternate-email"
+            size={20}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            placeholder={"Email"}
+            style={{ flex: 1, paddingVertical: 0 }}
+            keyboardType="email-address"
+            onChangeText={setEmail}
+            textContentType="emailAddress"
+            autoComplete="email"
+          />
         </View>
 
         <View
@@ -76,8 +97,20 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
             marginBottom: 25,
           }}
         >
-          <Ionicons name="ios-lock-closed-outline" size={20} color="#666" style={{ marginRight: 5 }} />
-          <TextInput placeholder={"Password"} style={{ flex: 1, paddingVertical: 0 }} secureTextEntry={true} onChangeText={setPassword} />
+          <Ionicons
+            name="ios-lock-closed-outline"
+            size={20}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            placeholder={"Password"}
+            style={{ flex: 1, paddingVertical: 0 }}
+            secureTextEntry={true}
+            onChangeText={setPassword}
+            textContentType="password"
+            autoComplete="password"
+          />
           <TouchableOpacity onPress={() => {}}>
             <Text style={{ color: "#AD40AF", fontWeight: "700" }}>Forgot?</Text>
           </TouchableOpacity>
@@ -85,7 +118,9 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
 
         <CustomButton label={"Login"} onPress={handleLogin} />
 
-        <Text style={{ textAlign: "center", color: "#666", marginBottom: 30 }}>Or, login with ...</Text>
+        <Text style={{ textAlign: "center", color: "#666", marginBottom: 30 }}>
+          Or, login with ...
+        </Text>
 
         <View
           style={{
@@ -105,7 +140,10 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
               marginRight: 5,
             }}
           >
-            <Image source={google} style={{ height: 24, width: 24, resizeMode: "contain" }} />
+            <Image
+              source={google}
+              style={{ height: 24, width: 24, resizeMode: "contain" }}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -119,7 +157,10 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
               marginRight: 5,
             }}
           >
-            <Image source={apple} style={{ height: 24, width: 24, resizeMode: "contain" }} />
+            <Image
+              source={apple}
+              style={{ height: 24, width: 24, resizeMode: "contain" }}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -132,7 +173,10 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
               paddingVertical: 10,
             }}
           >
-            <Image source={ms} style={{ height: 24, width: 24, resizeMode: "contain" }} />
+            <Image
+              source={ms}
+              style={{ height: 24, width: 24, resizeMode: "contain" }}
+            />
           </TouchableOpacity>
         </View>
 
@@ -145,7 +189,10 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
         >
           <Text>New to the app?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text style={{ color: "#AD40AF", fontWeight: "700" }}> Register</Text>
+            <Text style={{ color: "#AD40AF", fontWeight: "700" }}>
+              {" "}
+              Register
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
