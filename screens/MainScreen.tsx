@@ -1,10 +1,11 @@
 import React, { useRef } from "react";
 import { useState, useEffect } from "react";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { Dimensions, SafeAreaView, StyleSheet } from "react-native";
 import * as Location from "expo-location";
 import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
+import { getPostInfo } from "../apiCalls/calls";
 
 const styles = StyleSheet.create({
   map: {
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
 
 const MainScreen = ({ navigation }: { navigation: any }) => {
   const [location, setLocation] = useState<LocationObject>();
+  const [coordinates, setCoordinates] = useState<any[]>([]);
   const mapRef = useRef<any>();
 
   useEffect(() => {
@@ -45,6 +47,20 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
     })();
   }, []);
 
+  useEffect(() => {
+    getPostInfo("T").then((data) => {
+      const tmpCord: React.SetStateAction<any[]> = [];
+      data.forEach((post: any) => {
+        const singleCord = {
+          latitude: post.latitude,
+          longitude: post.longitude,
+        };
+        tmpCord.push(singleCord);
+      });
+      setCoordinates(tmpCord);
+    });
+  }, []);
+
   const goToMyLocation = async () => {
     mapRef.current.animateCamera({
       center: {
@@ -53,6 +69,13 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
       },
     });
   };
+
+  const pressMarker = () => {
+    coordinates.map((i) => {
+      console.log(i);
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <MapView
@@ -67,12 +90,23 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
           longitudeDelta: 0.09,
           latitudeDelta: 0.04,
         }}
-      />
-      <FAB
-        style={styles.fab}
-        icon="map-marker-radius"
-        onPress={goToMyLocation}
-      />
+      >
+        <>
+          {coordinates &&
+            coordinates.map((post: any, _index: any) => {
+              return (
+                <Marker
+                  coordinate={{
+                    latitude: post.latitude,
+                    longitude: post.longitude,
+                  }}
+                />
+              );
+            })}
+        </>
+      </MapView>
+
+      <FAB style={styles.fab} icon="map-marker-radius" onPress={pressMarker} />
     </SafeAreaView>
   );
 };
