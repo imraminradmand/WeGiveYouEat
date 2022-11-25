@@ -10,12 +10,14 @@ import {
   FlatList,
   ListRenderItem,
   ScrollView,
+  TouchableWithoutFeedback,
+  Button,
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 
 import accountIcon from "../assets/AccountAvatar.png";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CustomButton from "../components/CustomButton";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
@@ -23,9 +25,12 @@ import {
   deletePost,
   getAllPosts,
   getPostFromId,
+  getUser,
   getUserPosts,
+  updateUser,
 } from "../apiCalls/calls";
 import { err } from "react-native-svg/lib/typescript/xml";
+import { TextInput } from "react-native-paper";
 
 LogBox.ignoreAllLogs();
 
@@ -42,6 +47,12 @@ const AccountDetails = ({
 
   const [userPosts, setUserPosts] = useState<any[]>([]);
   const [refreshData, setRefreshData] = useState(false);
+  const [changeName, setChangeName] = useState(false);
+  const [changePhone, setChangePhone] = useState(false);
+
+  const [nameEditDone, setNameEditDone] = useState("Edit");
+  const [phoneEditDone, setPhoneEditDone] = useState("Edit");
+
   const { authParam } = route.params;
 
   const removePost = (id: number) => {
@@ -65,7 +76,9 @@ const AccountDetails = ({
     );
   };
 
-  const renderItem: ListRenderItem<any> = ({ item }) => <Item data={item} />;
+  const renderItem: ListRenderItem<any> = ({ item }: { item: any }) => (
+    <Item data={item} />
+  );
 
   useEffect(() => {
     getUserPosts(authParam.uid)
@@ -75,7 +88,13 @@ const AccountDetails = ({
       });
   }, [refreshData]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getUser(authParam.uid).then((data) => {
+      setEmail(data[0].email);
+      setFullName(data[0].fullname);
+      setPhoneNumber(data[0].phone);
+    });
+  }, []);
 
   const handleLogOut = () => {
     signOut(auth).then(() => {
@@ -83,204 +102,140 @@ const AccountDetails = ({
     });
   };
 
+  const handleTest = () => {
+    const body = `{"uid": "${authParam.uid}", "name": "Lao Gan Ma"}`;
+    console.log(body);
+    updateUser(body).catch((err) => console.log(err));
+    console.log("Changed to Lao Gan Ma");
+  };
+
+  const handleEditName = () => {
+    setChangeName(!changeName);
+    if (nameEditDone === "Done") {
+      setNameEditDone("Edit");
+      alert("Name changed successfully");
+      const body = `{"uid": "${authParam.uid}", "name": "${fullName}"}`;
+      updateUser(body);
+    } else if (nameEditDone === "Edit") {
+      setNameEditDone("Done");
+    }
+  };
+
+  const handleEditPhone = () => {
+    setChangePhone(!changePhone);
+    if (phoneEditDone === "Done") {
+      setPhoneEditDone("Edit");
+      alert("Phone number changed successfully");
+      const body = `{"uid": "${authParam.uid}", "phone": "${phoneNumber}"}`;
+      updateUser(body);
+    } else if (phoneEditDone === "Edit") {
+      setPhoneEditDone("Done");
+    }
+  };
+
   return (
-    <ScrollView style={styles.backg}>
-      <View style={{ paddingHorizontal: 50, marginTop: 50 }}>
-        <Text
-          style={{
-            fontFamily: "Roboto-Regular",
-            fontSize: 28,
-            fontWeight: "500",
-            color: "#333",
-            marginBottom: 30,
-            marginTop: 20,
-            alignSelf: "center",
-          }}
-        >
-          Account Details
-        </Text>
-        <View style={{ alignItems: "center" }}>
-          <Image source={accountIcon} style={styles.avatar} />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-
-            alignSelf: "center",
-            borderColor: "#FFFFFF",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Roboto-Regular",
-              fontSize: 16,
-              fontWeight: "500",
-              color: "purple",
-              opacity: 0.5,
-              marginTop: 20,
-            }}
-          >
-            Name
-          </Text>
-          <TouchableOpacity>
+    <SafeAreaView>
+      <TouchableWithoutFeedback>
+        <ScrollView style={styles.backg}>
+          <View style={{ paddingHorizontal: 50, marginTop: 50 }}>
             <Text
               style={{
                 fontFamily: "Roboto-Regular",
-                fontSize: 16,
+                fontSize: 28,
                 fontWeight: "500",
-                color: "red",
+                color: "#333",
+                marginBottom: 30,
                 marginTop: 20,
+                alignSelf: "center",
               }}
             >
-              Edit
+              Account Details
             </Text>
-          </TouchableOpacity>
-        </View>
-        <Text
-          style={{
-            fontFamily: "Roboto-Regular",
-            fontSize: 16,
-            fontWeight: "500",
-            color: "black",
-            top: 5,
-          }}
-        >
-          {fullName}
-        </Text>
 
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
+            <View style={{ alignItems: "center" }}>
+              <Image source={accountIcon} style={styles.avatar} />
+            </View>
 
-            alignSelf: "center",
-            borderColor: "#FFFFFF",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Roboto-Regular",
-              fontSize: 16,
-              fontWeight: "500",
-              color: "purple",
-              opacity: 0.5,
-              marginTop: 20,
-            }}
-          >
-            E-mail
-          </Text>
-          <TouchableOpacity>
+            <View style={styles.infoDisplay2}>
+              <Text style={styles.infoDisplay}>E-mail</Text>
+            </View>
+            <TextInput style={styles.infoUser} editable={false}>
+              {email}
+            </TextInput>
+
+            <View style={styles.infoDisplay2}>
+              <Text style={styles.infoDisplay}>Name</Text>
+              <TouchableOpacity>
+                <Text
+                  style={styles.edit}
+                  onPress={() => {
+                    handleEditName();
+                  }}
+                >
+                  {nameEditDone}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <TextInput
+              underlineColorAndroid="transparent"
+              style={styles.infoUser}
+              autoComplete="name"
+              textContentType="name"
+              editable={changeName}
+              placeholder={fullName}
+              onChangeText={(text) => setFullName(text)}
+            ></TextInput>
+
+            <View style={styles.infoDisplay2}>
+              <Text style={styles.infoDisplay}>Phone Number</Text>
+              <TouchableOpacity>
+                <Text
+                  style={styles.edit}
+                  onPress={() => {
+                    handleEditPhone();
+                  }}
+                >
+                  {phoneEditDone}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <TextInput
+              underlineColorAndroid="transparent"
+              style={styles.infoUser}
+              editable={changePhone}
+              autoComplete="tel"
+              textContentType="telephoneNumber"
+              keyboardType="phone-pad"
+              placeholder={phoneNumber}
+              onChangeText={(text) => setPhoneNumber(text)}
+            ></TextInput>
+
             <Text
               style={{
                 fontFamily: "Roboto-Regular",
-                fontSize: 16,
+                fontSize: 22,
                 fontWeight: "500",
-                color: "red",
-                marginTop: 20,
+                color: "#333",
+                marginBottom: 30,
+                marginTop: 50,
+                alignSelf: "center",
               }}
             >
-              Edit
+              My Posts
             </Text>
-          </TouchableOpacity>
-        </View>
-        <Text
-          style={{
-            fontFamily: "Roboto-Regular",
-            fontSize: 16,
-            fontWeight: "500",
-            color: "black",
-            top: 5,
-          }}
-        >
-          {email}
-        </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
 
-            alignSelf: "center",
-            borderColor: "#FFFFFF",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Roboto-Regular",
-              fontSize: 16,
-              fontWeight: "500",
-              color: "purple",
-              opacity: 0.5,
-              marginTop: 20,
-            }}
-          >
-            Phone Number
-          </Text>
-          <TouchableOpacity>
-            <Text
-              style={{
-                fontFamily: "Roboto-Regular",
-                fontSize: 16,
-                fontWeight: "500",
-                color: "red",
-                marginTop: 20,
-              }}
-            >
-              Edit
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <Text
-          style={{
-            fontFamily: "Roboto-Regular",
-            fontSize: 16,
-            fontWeight: "500",
-            color: "black",
-            top: 5,
-          }}
-        >
-          {phoneNumber}
-        </Text>
+            {userPosts && <FlatList data={userPosts} renderItem={renderItem} />}
 
-        <Text
-          style={{
-            fontFamily: "Roboto-Regular",
-            fontSize: 22,
-            fontWeight: "500",
-            color: "#333",
-            marginBottom: 30,
-            marginTop: 50,
-            alignSelf: "center",
-          }}
-        >
-          My Posts
-        </Text>
-
-        {userPosts && <FlatList data={userPosts} renderItem={renderItem} />}
-
-        <TouchableOpacity style={{ top: 20 }}>
-          <Text
-            style={{
-              fontFamily: "Roboto-Regular",
-              fontSize: 16,
-              fontWeight: "500",
-              color: "red",
-              marginBottom: 30,
-              marginTop: 20,
-              alignSelf: "center",
-            }}
-          >
-            Delete Account
-          </Text>
-        </TouchableOpacity>
-        <View style={{ top: 10, marginBottom: "40%" }}>
-          <CustomButton label={"Sign Out"} onPress={handleLogOut} />
-        </View>
-      </View>
-    </ScrollView>
+            <TouchableOpacity style={{ top: 20 }}>
+              <Text style={styles.delete}>Delete Account</Text>
+            </TouchableOpacity>
+            <View style={{ top: 10, marginBottom: "40%" }}>
+              <CustomButton label={"Sign Out"} onPress={handleLogOut} />
+            </View>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 };
 
@@ -333,5 +288,44 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     top: 15,
+  },
+  edit: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    fontWeight: "500",
+    color: "red",
+    marginTop: 20,
+  },
+  infoDisplay: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    fontWeight: "500",
+    color: "purple",
+    opacity: 0.5,
+    marginTop: 20,
+  },
+  infoUser: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    fontWeight: "500",
+    color: "black",
+    top: 5,
+    backgroundColor: "#fff49b",
+  },
+  infoDisplay2: {
+    flexDirection: "row",
+    width: "100%",
+    alignSelf: "center",
+    borderColor: "#FFFFFF",
+    justifyContent: "space-between",
+  },
+  delete: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    fontWeight: "500",
+    color: "red",
+    marginBottom: 30,
+    marginTop: 20,
+    alignSelf: "center",
   },
 });
