@@ -22,6 +22,11 @@ export const getPostFromId = async (id: number) => {
   return res.data;
 };
 
+export const getUser = async (id: string) => {
+  const res = await axios.get(`${URL}/users/${id}`);
+  return res.data;
+};
+
 export const addUser = async (body: string) => {
   const res = await axios.post(`${URL}/users`, JSON.parse(body));
   return res.data;

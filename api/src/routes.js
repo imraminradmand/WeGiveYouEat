@@ -62,7 +62,7 @@ module.exports.register = (app, database) => {
     })
 
     // Get user info given uid 
-    app.get("/api/users/:utid", async (req, res) => {
+    app.get("/api/users/:uid", async (req, res) => {
         let id = req.params.uid;
         let query;
 

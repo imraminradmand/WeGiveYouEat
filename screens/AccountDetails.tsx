@@ -89,11 +89,13 @@ const AccountDetails = ({
   }, [refreshData]);
 
   useEffect(() => {
-    getUser(authParam.uid).then((data) => {
-      setEmail(data[0].email);
-      setFullName(data[0].fullname);
-      setPhoneNumber(data[0].phone);
-    });
+    getUser(authParam.uid)
+      .then((data: any) => {
+        setEmail(data[0].email);
+        setFullName(data[0].fullname);
+        setPhoneNumber(data[0].phone);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const handleLogOut = () => {
