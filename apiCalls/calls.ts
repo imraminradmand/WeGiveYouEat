@@ -37,7 +37,7 @@ export const addPost = async (body: string) => {
   return res.data;
 };
 
-export const deleteUser = async (uid: number) => {
+export const deleteCurrentUser = async (uid: number) => {
   const res = await axios.delete(`${URL}/delete/users/${uid}`);
   return res.data;
 };

@@ -12,6 +12,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Button,
+  Alert,
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 
@@ -20,9 +21,10 @@ import accountIcon from "../assets/AccountAvatar.png";
 import React, { useState, useEffect } from "react";
 import CustomButton from "../components/CustomButton";
 import { auth } from "../firebase";
-import { signOut } from "firebase/auth";
+import { deleteUser, signOut } from "firebase/auth";
 import {
   deletePost,
+  deleteCurrentUser,
   getAllPosts,
   getPostFromId,
   getUser,
@@ -135,6 +137,38 @@ const AccountDetails = ({
     }
   };
 
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Account Deletion",
+      "Are you sure that you want to delete your account? This action cannot be undone!",
+      [
+        {
+          text: "Yes! Delete my account",
+          onPress: () => {
+            deleteCurrentUser(authParam.uid).then(() => {
+              alert("Account deleted successfully");
+              handleLogOut();
+            });
+            const user = auth.currentUser;
+            deleteUser(user!)
+              .then(() => {
+                console.log("User deleted successfully");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          },
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <SafeAreaView>
       <TouchableWithoutFeedback>
@@ -228,7 +262,7 @@ const AccountDetails = ({
 
             {userPosts && <FlatList data={userPosts} renderItem={renderItem} />}
 
-            <TouchableOpacity style={{ top: 20 }}>
+            <TouchableOpacity style={{ top: 20 }} onPress={handleDeleteAccount}>
               <Text style={styles.delete}>Delete Account</Text>
             </TouchableOpacity>
             <View style={{ top: 10, marginBottom: "40%" }}>
