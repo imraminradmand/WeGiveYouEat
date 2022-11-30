@@ -1,7 +1,15 @@
 import React, { useRef } from "react";
 import { useState, useEffect } from "react";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { Dimensions, SafeAreaView, StyleSheet } from "react-native";
+import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
+import {
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import * as Location from "expo-location";
 import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
@@ -24,6 +32,47 @@ const styles = StyleSheet.create({
     height: Dimensions.get("screen").height,
     justifyContent: "flex-start",
     alignItems: "stretch",
+  },
+  bubble: {
+    flexDirection: "column",
+    alignSelf: "flex-start",
+    backgroundColor: "#fff",
+    borderRadius: 6,
+    borderColor: "#ccc",
+    borderWidth: 0.5,
+    padding: 15,
+    width: 200,
+  },
+  name: {
+    fontSize: 16,
+    marginBottom: 5,
+    fontFamily: "Roboto-Regular",
+  },
+  description: {
+    fontSize: 12,
+    marginBottom: 5,
+    fontFamily: "Roboto-Regular",
+  },
+  image: {
+    width: "100%",
+    height: 80,
+  },
+
+  arrow: {
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+    borderTopColor: "#fff",
+    borderWidth: 16,
+    alignSelf: "center",
+    marginTop: -32,
+  },
+  arrowBorder: {
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+    borderTopColor: "#007a87",
+    borderWidth: 16,
+    alignSelf: "center",
+    marginTop: -0.5,
   },
 });
 
@@ -51,6 +100,7 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
     getPostInfo("T").then((data) => {
       const tmpCord: React.SetStateAction<any[]> = [];
       data.forEach((post: any) => {
+        // modify api to return images too
         const singleCord = {
           latitude: post.latitude,
           longitude: post.longitude,
@@ -90,11 +140,34 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
             coordinates.map((post: any, _index: any) => {
               return (
                 <Marker
+                  key={_index}
                   coordinate={{
                     latitude: post.latitude,
                     longitude: post.longitude,
                   }}
-                />
+                >
+                  <Callout
+                    tooltip
+                    onPress={() => {
+                      navigation.navigate("SinglePost");
+                    }}
+                  >
+                    <View>
+                      <View style={styles.bubble}>
+                        <Text style={styles.name}>2 Kebab Skewers</Text>
+                        <Text style={styles.description}>
+                          1 Beef + 1 Chicken
+                        </Text>
+                        <Image
+                          style={styles.image}
+                          source={require("../assets/testPoster.jpeg")}
+                        />
+                      </View>
+                      <View style={styles.arrowBorder}></View>
+                      <View style={styles.arrow}></View>
+                    </View>
+                  </Callout>
+                </Marker>
               );
             })}
         </>

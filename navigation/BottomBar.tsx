@@ -10,6 +10,7 @@ import AuthStack from "../navigation/AuthNavigator";
 import Feather from "react-native-vector-icons/Feather";
 import { View, StyleSheet } from "react-native";
 import LoginScreen from "../screens/LoginScreen";
+import MainScreenStackNav from "./MainScreenStackNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -91,7 +92,7 @@ const BottomBar = () => {
         <>
           <Tab.Screen
             name="Home"
-            component={MainScreen}
+            component={MainScreenStackNav}
             options={() => ({
               tabBarIcon: ({ color, size }) => (
                 <View style={styles.iconView}>
