@@ -25,6 +25,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
+import { addUser } from "../apiCalls/calls";
 
 const SignUpScreen = ({ navigation }: { navigation: any }) => {
   const [fullName, setFullName] = useState("");
@@ -38,7 +39,7 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
     const validPhone = phoneNumber.match(
-      /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
+      /^(\+\d{1,2}\s)?\(?\d{3}\)?\d{3}\d{4}$/
     );
 
     if (!validEmail) {
@@ -63,6 +64,9 @@ const SignUpScreen = ({ navigation }: { navigation: any }) => {
             email: email,
             phone: phoneNumber,
           });
+
+          const body = `{"uid": "${uid}", "fullName": "${fullName}", "email": "${email}", "phone": "${phoneNumber}"}`;
+          addUser(body).catch((err) => console.log(err));
         })
         .then(() => {
           const unsubscribe = onAuthStateChanged(auth, (user) => {
