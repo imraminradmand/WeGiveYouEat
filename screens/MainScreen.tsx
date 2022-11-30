@@ -8,6 +8,7 @@ import {
   View,
   Text,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import * as Location from "expo-location";
 import { FAB } from "react-native-paper";
@@ -139,12 +140,18 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
             coordinates.map((post: any, _index: any) => {
               return (
                 <Marker
+                  key={_index}
                   coordinate={{
                     latitude: post.latitude,
                     longitude: post.longitude,
                   }}
                 >
-                  <Callout tooltip>
+                  <Callout
+                    tooltip
+                    onPress={() => {
+                      navigation.navigate("SinglePost");
+                    }}
+                  >
                     <View>
                       <View style={styles.bubble}>
                         <Text style={styles.name}>2 Kebab Skewers</Text>
