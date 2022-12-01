@@ -14,16 +14,22 @@ import {
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import { GOOGLE_API_KEY } from "@env";
 import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
 import CustomButton from "../components/CustomButton";
-import InputField from "../components/InputField";
+import { useDebounce } from "../hooks/useDebounce";
+import SearchBarWithAutocomplete from "../components/SearchBarWithAutoComplete";
 
-import google from "../assets/loginPage/google.png";
-
-const testArr = [
-  "file:///Users/raminradmand/Library/Developer/CoreSimulator/Devices/5EFEF0B8-9CD5-4A8A-8F63-0FBEEC063C1E/data/Containers/Data/Application/7D38E662-2F99-4868-8812-032FC3CB7157/Library/Caches/ExponentExperienceData/%2540raminradmand%252FWeGiveYouEat/ImagePicker/447FB97F-791A-428F-8365-BEE7E253FAF8.jpg",
-  "file:///Users/raminradmand/Library/Developer/CoreSimulator/Devices/5EFEF0B8-9CD5-4A8A-8F63-0FBEEC063C1E/data/Containers/Data/Application/7D38E662-2F99-4868-8812-032FC3CB7157/Library/Caches/ExponentExperienceData/%2540raminradmand%252FWeGiveYouEat/ImagePicker/B367DF27-5431-4A5C-A5A8-EC1048CEC065.jpg",
-];
+export type PredictionType = {
+  description: string;
+  place_id: string;
+  reference: string;
+  matched_substrings: any[];
+  tructured_formatting: Object;
+  terms: Object[];
+  types: string[];
+};
 
 const PostScreen = () => {
   const [hasPermissions, setPermissions] = useState(false);
@@ -31,6 +37,13 @@ const PostScreen = () => {
 
   const [address, setAdress] = useState("");
   const [phone, setPhone] = useState("");
+
+  const [search, setSearch] = useState({ term: "", fetchPredictions: false });
+  const [showPredictions, setShowPredictions] = useState(false);
+  const [predictions, setPredictions] = useState<PredictionType[]>([]);
+
+  const GOOGLE_PALCES_API_BASE_URL =
+    "https://maps.googleapis.com/maps/api/place";
 
   useEffect(() => {
     (async () => {
@@ -54,6 +67,53 @@ const PostScreen = () => {
       });
     }
   };
+
+  const onChangeText = async () => {
+    if (search.term.trim() === "") return;
+    if (!search.fetchPredictions) return;
+
+    const apiUrl = `${GOOGLE_PALCES_API_BASE_URL}/autocomplete/json?key=${GOOGLE_API_KEY}&input=${search.term}`;
+    try {
+      const result = await axios.request({
+        method: "post",
+        url: apiUrl,
+      });
+      if (result) {
+        const {
+          data: { predictions },
+        } = result;
+        setPredictions(predictions);
+        setShowPredictions(true);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useDebounce(onChangeText, 1000, [search.term]);
+
+  const onPredictionTapped = async (placeId: string, description: string) => {
+    const apiUrl = `${GOOGLE_PALCES_API_BASE_URL}/details/json?key=${GOOGLE_API_KEY}&place_id=${placeId}`;
+    try {
+      const result = await axios.request({
+        method: "post",
+        url: apiUrl,
+      });
+      if (result) {
+        const {
+          data: {
+            result: {
+              geometry: { location },
+            },
+          },
+        } = result;
+        const { lat, lng } = location;
+        setShowPredictions(false);
+        setSearch({ term: description, fetchPredictions: false });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <KeyboardAwareScrollView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
@@ -73,30 +133,16 @@ const PostScreen = () => {
         </View>
 
         <View style={styles.body}>
-          <InputField
-            label="Address"
-            icon={
-              <MaterialIcons
-                name="home"
-                size={20}
-                color="#666"
-                style={{ marginRight: 5 }}
-              />
-            }
-            keyboardType="email-address"
+          <SearchBarWithAutocomplete
+            value={search.term}
+            onChangeText={(text) => {
+              setSearch({ term: text, fetchPredictions: true });
+            }}
+            showPredictions={showPredictions}
+            predictions={predictions}
+            onPredictionTapped={onPredictionTapped}
           />
-          <InputField
-            label="Phone"
-            icon={
-              <MaterialIcons
-                name="phone"
-                size={20}
-                color="#666"
-                style={{ marginRight: 5 }}
-              />
-            }
-            keyboardType="email-address"
-          />
+
           <TextInput
             style={{
               height: 150,
@@ -112,7 +158,7 @@ const PostScreen = () => {
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
           />
-          <View style={{ top: 40 }}>
+          <View style={{ top: 100 }}>
             <CustomButton
               label="Post"
               onPress={() => {
