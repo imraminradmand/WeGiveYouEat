@@ -35,7 +35,8 @@ const PostScreen = () => {
   const [hasPermissions, setPermissions] = useState(false);
   const [image, setImage] = useState("");
 
-  const [address, setAdress] = useState("");
+  const [lat, setLat] = useState(0);
+  const [long, setLong] = useState(0);
   const [phone, setPhone] = useState("");
 
   const [search, setSearch] = useState({ term: "", fetchPredictions: false });
@@ -109,6 +110,8 @@ const PostScreen = () => {
         const { lat, lng } = location;
         setShowPredictions(false);
         setSearch({ term: description, fetchPredictions: false });
+        setLat(lat);
+        setLong(lng);
       }
     } catch (e) {
       console.log(e);
@@ -162,7 +165,7 @@ const PostScreen = () => {
             <CustomButton
               label="Post"
               onPress={() => {
-                console.log(typeof image);
+                console.log(lat, long);
               }}
             />
           </View>

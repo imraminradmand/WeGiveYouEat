@@ -102,16 +102,19 @@ const styles = StyleSheet.create({
   inputStyle: {
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: "#cfcfcf",
+    backgroundColor: "#ffff",
+    borderColor: "#c579c7",
+    borderWidth: 3,
     borderRadius: 20,
     color: "black",
     fontSize: 16,
   },
   predictionsContainer: {
-    backgroundColor: "#cfcfcf",
+    backgroundColor: "#ffff",
     padding: 10,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
+    borderColor: "#c579c7",
   },
   predictionRow: {
     paddingBottom: 15,
