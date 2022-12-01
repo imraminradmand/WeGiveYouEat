@@ -1,3 +1,5 @@
+// CREDITS: https://github.com/KentaKodashima/RNCustomSearchBarWithGooglePlacesAutocomplete
+
 import React, { FunctionComponent, useState } from "react";
 import {
   StyleSheet,
