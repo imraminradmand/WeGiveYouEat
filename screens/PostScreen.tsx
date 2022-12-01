@@ -12,7 +12,6 @@ import {
   Keyboard,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Checkbox from "expo-checkbox";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import * as ImagePicker from "expo-image-picker";
@@ -28,11 +27,10 @@ const testArr = [
 
 const PostScreen = () => {
   const [hasPermissions, setPermissions] = useState(false);
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState("");
 
-  const [isVeg, setVeg] = useState(false);
-  const [isHalal, setHalal] = useState(false);
-  const [isDrink, setDrink] = useState(false);
+  const [address, setAdress] = useState("");
+  const [phone, setPhone] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -44,18 +42,16 @@ const PostScreen = () => {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
+      allowsMultipleSelection: false,
+      allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.canceled) {
-      let imageArr: any = [];
       result.assets.forEach((asset) => {
-        imageArr.push(asset.uri);
+        setImage(asset.uri);
       });
-      console.log(imageArr);
-      setImage(imageArr);
     }
   };
   return (
@@ -64,8 +60,16 @@ const PostScreen = () => {
         <View style={{ top: 20 }}>
           <Text style={styles.header}>Create New Post</Text>
         </View>
+        {image && (
+          <View style={styles.imageView}>
+            <Image
+              source={{ uri: image }}
+              style={{ width: 300, height: 200, borderRadius: 10 }}
+            />
+          </View>
+        )}
         <View style={styles.imageCarousel}>
-          <CustomButton label="Upload Image(s)" onPress={pickImage} />
+          <CustomButton label="Upload Image" onPress={pickImage} />
         </View>
 
         <View style={styles.body}>
@@ -95,9 +99,10 @@ const PostScreen = () => {
           />
           <TextInput
             style={{
-              height: 80,
+              height: 150,
               width: 300,
               padding: 10,
+              top: "2%",
               borderColor: "grey",
               borderWidth: 1,
               borderRadius: 10,
@@ -107,43 +112,13 @@ const PostScreen = () => {
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
           />
-
-          <View style={{ alignContent: "center", top: 15 }}>
-            <Text
-              style={{
-                alignSelf: "center",
-                fontFamily: "Roboto-Regular",
-                fontSize: 18,
-              }}
-            >
-              Category
-            </Text>
-
-            <View style={styles.section}>
-              <Checkbox
-                style={styles.checkbox}
-                value={isVeg}
-                onValueChange={setVeg}
-              />
-              <Text style={styles.paragraph}>Vegetarian</Text>
-
-              <Checkbox
-                style={styles.checkbox}
-                value={isHalal}
-                onValueChange={setHalal}
-              />
-              <Text style={styles.paragraph}>Halal</Text>
-
-              <Checkbox
-                style={styles.checkbox}
-                value={isDrink}
-                onValueChange={setDrink}
-              />
-              <Text style={styles.paragraph}>Drink</Text>
-            </View>
-          </View>
           <View style={{ top: 40 }}>
-            <CustomButton label="Post" onPress={() => {}} />
+            <CustomButton
+              label="Post"
+              onPress={() => {
+                console.log(typeof image);
+              }}
+            />
           </View>
         </View>
       </SafeAreaView>
@@ -174,10 +149,10 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   imageCarousel: {
-    top: 200,
+    top: "7%",
   },
   body: {
-    top: 220,
+    top: "8%",
     width: 300,
   },
   section: {
@@ -188,7 +163,7 @@ const styles = StyleSheet.create({
   paragraph: {
     fontSize: 15,
   },
-  checkbox: {
-    margin: 8,
+  imageView: {
+    top: "5%",
   },
 });
