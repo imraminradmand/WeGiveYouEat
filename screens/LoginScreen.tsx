@@ -8,8 +8,8 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
+
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 
 import logo from "../assets/loginPage/Logo.png";
 import apple from "../assets/loginPage/apple.png";

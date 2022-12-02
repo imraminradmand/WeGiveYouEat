@@ -10,6 +10,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
@@ -175,7 +176,12 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
 
       <FAB
         style={styles.fab}
-        icon="map-marker-radius"
+        icon={{
+          source: {
+            uri: "https://static-00.iconduck.com/assets.00/my-location-icon-256x256-rr7zw1f1.png",
+          },
+          direction: "auto",
+        }}
         onPress={goToMyLocation}
       />
     </SafeAreaView>

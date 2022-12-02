@@ -10,7 +10,7 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Feather from "react-native-vector-icons/Feather";
+import { Feather } from "@expo/vector-icons";
 import CustomButton from "../components/CustomButton";
 
 const SinglePostScreen = ({ navigation }: { navigation: any }) => {

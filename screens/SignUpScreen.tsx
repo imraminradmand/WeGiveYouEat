@@ -9,8 +9,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import CustomButton from "../components/CustomButton";
 
 import logo from "../assets/loginPage/Logo.png";
