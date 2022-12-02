@@ -106,13 +106,6 @@ const AccountDetails = ({
     });
   };
 
-  const handleTest = () => {
-    const body = `{"uid": "${authParam.uid}", "name": "Lao Gan Ma"}`;
-    console.log(body);
-    updateUser(body).catch((err) => console.log(err));
-    console.log("Changed to Lao Gan Ma");
-  };
-
   const handleEditName = () => {
     setChangeName(!changeName);
     if (nameEditDone === "Done") {
