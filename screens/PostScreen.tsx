@@ -7,11 +7,10 @@ import {
   Text,
   SafeAreaView,
   Image,
-  Button,
   TextInput,
   Keyboard,
 } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { GOOGLE_API_KEY } from "@env";
@@ -145,23 +144,50 @@ const PostScreen = () => {
             predictions={predictions}
             onPredictionTapped={onPredictionTapped}
           />
-
+          <View
+            style={{
+              flexDirection: "row",
+              padding: 10,
+              marginBottom: 25,
+              top: "5%",
+              borderWidth: 3,
+              borderRadius: 10,
+              borderColor: "#c579c7",
+              backgroundColor: "#ffff",
+            }}
+          >
+            <MaterialIcons
+              name="phone"
+              size={20}
+              color="#666"
+              style={{ marginRight: 5 }}
+            />
+            <TextInput
+              placeholder={"(###)-###-####"}
+              style={{ flex: 1, paddingVertical: 0 }}
+              keyboardType="phone-pad"
+              onChangeText={setPhone}
+              textContentType="telephoneNumber"
+              autoComplete="tel"
+            />
+          </View>
           <TextInput
             style={{
               height: 150,
               width: 300,
               padding: 10,
               top: "2%",
-              borderColor: "grey",
-              borderWidth: 1,
+              borderColor: "#c579c7",
+              borderWidth: 3,
               borderRadius: 10,
+              backgroundColor: "#ffff",
             }}
             multiline={true}
             placeholder="Description"
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
           />
-          <View style={{ top: 100 }}>
+          <View style={{ top: 20 }}>
             <CustomButton
               label="Post"
               onPress={() => {
