@@ -7,7 +7,7 @@ import MainScreen from "../screens/MainScreen";
 import PostScreen from "../screens/PostScreen";
 import AuthStack from "../navigation/AuthNavigator";
 
-import Feather from "react-native-vector-icons/Feather";
+import { Feather } from '@expo/vector-icons';
 import { View, StyleSheet } from "react-native";
 import LoginScreen from "../screens/LoginScreen";
 import MainScreenStackNav from "./MainScreenStackNav";
