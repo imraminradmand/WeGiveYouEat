@@ -14,7 +14,7 @@ import {
   Button,
   Alert,
 } from "react-native";
-import Feather from "react-native-vector-icons/Feather";
+import { Feather } from "@expo/vector-icons";
 
 import accountIcon from "../assets/AccountAvatar.png";
 
