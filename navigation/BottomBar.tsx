@@ -7,10 +7,11 @@ import MainScreen from "../screens/MainScreen";
 import PostScreen from "../screens/PostScreen";
 import AuthStack from "../navigation/AuthNavigator";
 
-import { Feather } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
 import { View, StyleSheet } from "react-native";
 import LoginScreen from "../screens/LoginScreen";
 import MainScreenStackNav from "./MainScreenStackNav";
+import SinglePostScreen from "../screens/SinglePostScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +56,7 @@ const BottomBar = () => {
         <>
           <Tab.Screen
             name="Home"
-            component={MainScreen}
+            component={MainScreenStackNav}
             options={() => ({
               tabBarIcon: ({ color, size }) => (
                 <View style={styles.iconView}>
