@@ -129,8 +129,8 @@ const PostScreen = ({ route }: { route: any }) => {
     addPost(body).catch((err) => console.log(err));
   };
   return (
-    <KeyboardAwareScrollView style={{ flex: 1 }}>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAwareScrollView style={{ flex: 1 }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
@@ -235,8 +235,8 @@ const PostScreen = ({ route }: { route: any }) => {
             </View>
           </View>
         </ScrollView>
-      </SafeAreaView>
-    </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 
