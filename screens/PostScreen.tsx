@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import {
   View,
@@ -128,9 +127,10 @@ const PostScreen = ({ route }: { route: any }) => {
     const body = `{"postName": "${postName}", "description": "${desc}", "address": "${search.term}", "longitude": ${long}, "latitude":${lat}, "phone":"${phone}", "user_uid":"${phone}", "image": "${base64}"}`;
     addPost(body).catch((err) => console.log(err));
   };
+
   return (
-    <KeyboardAwareScrollView style={{ flex: 1 }}>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAwareScrollView style={{ flex: 1 }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
@@ -181,9 +181,9 @@ const PostScreen = ({ route }: { route: any }) => {
               <TextInput
                 placeholder={"Post Name"}
                 style={{ flex: 1, paddingVertical: 0 }}
-                keyboardType="phone-pad"
                 onChangeText={setPostName}
                 textContentType="name"
+                returnKeyType="next"
               />
             </View>
             <View
@@ -235,8 +235,8 @@ const PostScreen = ({ route }: { route: any }) => {
             </View>
           </View>
         </ScrollView>
-      </SafeAreaView>
-    </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 
