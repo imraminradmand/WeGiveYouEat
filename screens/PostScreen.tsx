@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import {
   View,
@@ -128,6 +128,7 @@ const PostScreen = ({ route }: { route: any }) => {
     const body = `{"postName": "${postName}", "description": "${desc}", "address": "${search.term}", "longitude": ${long}, "latitude":${lat}, "phone":"${phone}", "user_uid":"${phone}", "image": "${base64}"}`;
     addPost(body).catch((err) => console.log(err));
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView style={{ flex: 1 }}>
@@ -181,9 +182,9 @@ const PostScreen = ({ route }: { route: any }) => {
               <TextInput
                 placeholder={"Post Name"}
                 style={{ flex: 1, paddingVertical: 0 }}
-                keyboardType="phone-pad"
                 onChangeText={setPostName}
                 textContentType="name"
+                returnKeyType="next"
               />
             </View>
             <View
