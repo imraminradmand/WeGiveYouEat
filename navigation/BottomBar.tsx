@@ -58,6 +58,7 @@ const BottomBar = () => {
             name="Home"
             component={MainScreenStackNav}
             options={() => ({
+              unmountOnBlur: true,
               tabBarIcon: ({ color, size }) => (
                 <View style={styles.iconView}>
                   <Feather name="map" color={color} size={size} />
@@ -69,6 +70,7 @@ const BottomBar = () => {
             name="Post"
             component={PostScreen}
             options={{
+              unmountOnBlur: true,
               tabBarBadgeStyle: { backgroundColor: "yellow" },
               tabBarIcon: ({ color, size }) => (
                 <View style={styles.iconView}>
@@ -81,6 +83,7 @@ const BottomBar = () => {
             name="LoginFlow"
             component={AuthStack}
             options={{
+              unmountOnBlur: true,
               tabBarIcon: ({ color, size }) => (
                 <View style={styles.iconView}>
                   <Feather name="user" color={color} size={size} />
@@ -95,6 +98,7 @@ const BottomBar = () => {
             name="Home"
             component={MainScreenStackNav}
             options={() => ({
+              unmountOnBlur: true,
               tabBarIcon: ({ color, size }) => (
                 <View style={styles.iconView}>
                   <Feather name="map" color={color} size={size} />
@@ -106,6 +110,7 @@ const BottomBar = () => {
             name="LoginFlow"
             component={AuthStack}
             options={{
+              unmountOnBlur: true,
               tabBarIcon: ({ color, size }) => (
                 <View style={styles.iconView}>
                   <Feather name="user" color={color} size={size} />
