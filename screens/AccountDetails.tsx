@@ -31,7 +31,7 @@ import {
   getUserPosts,
   updateUser,
 } from "../apiCalls/calls";
-import { err } from "react-native-svg/lib/typescript/xml";
+
 import { TextInput } from "react-native-paper";
 
 LogBox.ignoreAllLogs();
