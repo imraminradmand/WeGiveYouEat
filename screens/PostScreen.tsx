@@ -9,6 +9,7 @@ import {
   Image,
   TextInput,
   Keyboard,
+  ScrollView,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -19,6 +20,7 @@ import axios from "axios";
 import CustomButton from "../components/CustomButton";
 import { useDebounce } from "../hooks/useDebounce";
 import SearchBarWithAutocomplete from "../components/SearchBarWithAutoComplete";
+import { addPost } from "../apiCalls/calls";
 
 export type PredictionType = {
   description: string;
@@ -30,13 +32,16 @@ export type PredictionType = {
   types: string[];
 };
 
-const PostScreen = () => {
+const PostScreen = ({ route }: { route: any }) => {
   const [hasPermissions, setPermissions] = useState(false);
   const [image, setImage] = useState("");
+  const [base64, setBase64] = useState("");
 
   const [lat, setLat] = useState(0);
   const [long, setLong] = useState(0);
   const [phone, setPhone] = useState("");
+  const [postName, setPostName] = useState("");
+  const [desc, setDesc] = useState("");
 
   const [search, setSearch] = useState({ term: "", fetchPredictions: false });
   const [showPredictions, setShowPredictions] = useState(false);
@@ -59,11 +64,13 @@ const PostScreen = () => {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
 
     if (!result.canceled) {
       result.assets.forEach((asset) => {
         setImage(asset.uri);
+        setBase64(asset.base64 ? asset.base64 : "");
       });
     }
   };
@@ -116,86 +123,118 @@ const PostScreen = () => {
       console.log(e);
     }
   };
+
+  const handlePostToDB = () => {
+    const body = `{"postName": "${postName}", "description": "${desc}", "address": "${search.term}", "longitude": ${long}, "latitude":${lat}, "phone":"${phone}", "user_uid":"${phone}", "image": "${base64}"}`;
+    addPost(body).catch((err) => console.log(err));
+  };
   return (
     <KeyboardAwareScrollView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
-        <View style={{ top: 20 }}>
-          <Text style={styles.header}>Create New Post</Text>
-        </View>
-        {image && (
-          <View style={styles.imageView}>
-            <Image
-              source={{ uri: image }}
-              style={{ width: 300, height: 200, borderRadius: 10 }}
-            />
-          </View>
-        )}
-        <View style={styles.imageCarousel}>
-          <CustomButton label="Upload Image" onPress={pickImage} />
-        </View>
-
-        <View style={styles.body}>
-          <SearchBarWithAutocomplete
-            value={search.term}
-            onChangeText={(text) => {
-              setSearch({ term: text, fetchPredictions: true });
-            }}
-            showPredictions={showPredictions}
-            predictions={predictions}
-            onPredictionTapped={onPredictionTapped}
-          />
-          <View
-            style={{
-              flexDirection: "row",
-              padding: 10,
-              marginBottom: 25,
-              top: "5%",
-              borderWidth: 3,
-              borderRadius: 10,
-              borderColor: "#c579c7",
-              backgroundColor: "#ffff",
-            }}
-          >
-            <MaterialIcons
-              name="phone"
-              size={20}
-              color="#666"
-              style={{ marginRight: 5 }}
-            />
-            <TextInput
-              placeholder={"(###)-###-####"}
-              style={{ flex: 1, paddingVertical: 0 }}
-              keyboardType="phone-pad"
-              onChangeText={setPhone}
-              textContentType="telephoneNumber"
-              autoComplete="tel"
-            />
-          </View>
-          <TextInput
-            style={{
-              height: 150,
-              width: 300,
-              padding: 10,
-              top: "2%",
-              borderColor: "#c579c7",
-              borderWidth: 3,
-              borderRadius: 10,
-              backgroundColor: "#ffff",
-            }}
-            multiline={true}
-            placeholder="Description"
-            returnKeyType="done"
-            onSubmitEditing={Keyboard.dismiss}
-          />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        >
           <View style={{ top: 20 }}>
-            <CustomButton
-              label="Post"
-              onPress={() => {
-                console.log(lat, long);
-              }}
-            />
+            <Text style={styles.header}>Create New Post</Text>
           </View>
-        </View>
+          {image && (
+            <View style={styles.imageView}>
+              <Image
+                source={{ uri: image }}
+                style={{ width: 300, height: 200, borderRadius: 10 }}
+              />
+            </View>
+          )}
+          <View style={styles.imageCarousel}>
+            <CustomButton label="Upload Image" onPress={pickImage} />
+          </View>
+
+          <View style={styles.body}>
+            <SearchBarWithAutocomplete
+              value={search.term}
+              onChangeText={(text) => {
+                setSearch({ term: text, fetchPredictions: true });
+              }}
+              showPredictions={showPredictions}
+              predictions={predictions}
+              onPredictionTapped={onPredictionTapped}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                padding: 10,
+                marginBottom: 25,
+                top: "5%",
+                borderWidth: 3,
+                borderRadius: 10,
+                borderColor: "#c579c7",
+                backgroundColor: "#ffff",
+              }}
+            >
+              <MaterialIcons
+                name="post-add"
+                size={20}
+                color="#666"
+                style={{ marginRight: 5 }}
+              />
+              <TextInput
+                placeholder={"Post Name"}
+                style={{ flex: 1, paddingVertical: 0 }}
+                keyboardType="phone-pad"
+                onChangeText={setPostName}
+                textContentType="name"
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                padding: 10,
+                marginBottom: 25,
+                top: "5%",
+                borderWidth: 3,
+                borderRadius: 10,
+                borderColor: "#c579c7",
+                backgroundColor: "#ffff",
+              }}
+            >
+              <MaterialIcons
+                name="phone"
+                size={20}
+                color="#666"
+                style={{ marginRight: 5 }}
+              />
+              <TextInput
+                placeholder={"(###)-###-####"}
+                style={{ flex: 1, paddingVertical: 0 }}
+                keyboardType="phone-pad"
+                onChangeText={setPhone}
+                textContentType="telephoneNumber"
+                autoComplete="tel"
+              />
+            </View>
+            <TextInput
+              style={{
+                height: 150,
+                width: 300,
+                padding: 10,
+                top: "2%",
+                borderColor: "#c579c7",
+                borderWidth: 3,
+                borderRadius: 10,
+                backgroundColor: "#ffff",
+              }}
+              multiline={true}
+              placeholder="Description"
+              returnKeyType="done"
+              onSubmitEditing={Keyboard.dismiss}
+              onChangeText={setDesc}
+            />
+            <View style={{ top: 20, marginBottom: "70%" }}>
+              <CustomButton label="Post" onPress={handlePostToDB} />
+            </View>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </KeyboardAwareScrollView>
   );
