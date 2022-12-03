@@ -182,7 +182,6 @@ const PostScreen = ({ route }: { route: any }) => {
                 placeholder={"Post Name"}
                 style={{ flex: 1, paddingVertical: 0 }}
                 onChangeText={setPostName}
-                textContentType="name"
                 returnKeyType="next"
               />
             </View>
