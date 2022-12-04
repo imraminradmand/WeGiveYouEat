@@ -15,6 +15,7 @@ import * as Location from "expo-location";
 import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
 import { getPostInfo } from "../apiCalls/calls";
+import { useIsFocused } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
   map: {
@@ -77,10 +78,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const MainScreen = ({ navigation }: { navigation: any }) => {
+const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   const [location, setLocation] = useState<LocationObject>();
   const [coordinates, setCoordinates] = useState<any[]>([]);
   const mapRef = useRef<any>();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     (async () => {
@@ -98,19 +100,20 @@ const MainScreen = ({ navigation }: { navigation: any }) => {
   }, []);
 
   useEffect(() => {
-    getPostInfo("T").then((data) => {
-      const tmpCord: React.SetStateAction<any[]> = [];
-      data.forEach((post: any) => {
-        // modify api to return images too
-        const singleCord = {
-          latitude: post.latitude,
-          longitude: post.longitude,
-        };
-        tmpCord.push(singleCord);
+    isFocused &&
+      getPostInfo("T").then((data) => {
+        const tmpCord: React.SetStateAction<any[]> = [];
+        data.forEach((post: any) => {
+          // modify api to return images too
+          const singleCord = {
+            latitude: post.latitude,
+            longitude: post.longitude,
+          };
+          tmpCord.push(singleCord);
+        });
+        setCoordinates(tmpCord);
       });
-      setCoordinates(tmpCord);
-    });
-  }, []);
+  }, [isFocused]);
 
   const goToMyLocation = async () => {
     mapRef.current.animateCamera({

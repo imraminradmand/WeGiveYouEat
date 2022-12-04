@@ -31,7 +31,7 @@ export type PredictionType = {
   types: string[];
 };
 
-const PostScreen = ({ route }: { route: any }) => {
+const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const { authParam } = route.params;
   const [hasPermissions, setPermissions] = useState(false);
   const [image, setImage] = useState("");
@@ -129,16 +129,18 @@ const PostScreen = ({ route }: { route: any }) => {
     const blob = await base64Response.blob();
 
     const body = `{
-      "postName": "${postName}",
-      "description":"${desc}",
-      "longitude": ${long},
-      "latitude":${lat},
-      "phoneNumber": "${phone}",
-      "useruid":"${authParam.uid}",
-      "image": "${blob}",
-      "address": "${search.term}"
-  }`;
+        "postName": "${postName}",
+        "description":"${desc}",
+        "longitude": ${long},
+        "latitude":${lat},
+        "phoneNumber": "${phone}",
+        "useruid":"${authParam.uid}",
+        "image": "${blob}",
+        "address": "${search.term}"
+    }`;
     addPost(body).catch((err) => console.log(err));
+    alert("Post Successfully added!");
+    navigation.navigate("Home");
   };
 
   return (

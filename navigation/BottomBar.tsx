@@ -58,7 +58,6 @@ const BottomBar = () => {
             name="Home"
             component={MainScreenStackNav}
             options={() => ({
-              unmountOnBlur: true,
               tabBarIcon: ({ color, size }) => (
                 <View style={styles.iconView}>
                   <Feather name="map" color={color} size={size} />
