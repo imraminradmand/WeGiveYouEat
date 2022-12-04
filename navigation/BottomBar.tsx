@@ -69,6 +69,7 @@ const BottomBar = () => {
           <Tab.Screen
             name="Post"
             component={PostScreen}
+            initialParams={{ authParam: user }}
             options={{
               unmountOnBlur: true,
               tabBarBadgeStyle: { backgroundColor: "yellow" },

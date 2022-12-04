@@ -32,6 +32,8 @@ export type PredictionType = {
 };
 
 const PostScreen = ({ route }: { route: any }) => {
+  const { authParam } = route.params;
+
   const [hasPermissions, setPermissions] = useState(false);
   const [image, setImage] = useState("");
   const [base64, setBase64] = useState("");
