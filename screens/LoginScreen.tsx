@@ -16,16 +16,50 @@ import apple from "../assets/loginPage/apple.png";
 import google from "../assets/loginPage/google.png";
 import ms from "../assets/loginPage/MS.png";
 
-import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { auth } from "../firebase";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
+import { ANDROID_CLIENT_ID, IOS_CLIENT_ID, WEB_CLIENT_ID } from "@env";
+import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
+
+WebBrowser.maybeCompleteAuthSession();
+
 const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [accessToekn, setAccessToken] = useState<any>();
+  const [userInfo, setUserInfo] = useState();
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: ANDROID_CLIENT_ID,
+    iosClientId: IOS_CLIENT_ID,
+    expoClientId: WEB_CLIENT_ID,
+  });
+
+  useEffect(() => {
+    if (response?.type == "success") {
+      setAccessToken(response.authentication?.accessToken);
+    }
+  }, [response]);
+
+  const getUserData = async () => {
+    let userInfoResponse = await fetch(
+      "https://www.googleapis.com/userinfo/v2/me",
+      {
+        headers: { Authorization: `Bearer ${accessToekn}` },
+      }
+    );
+
+    userInfoResponse.json().then((data) => {
+      console.log("------------------------------------------\n", data);
+      // setUserInfo(data);
+    });
+  };
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
@@ -41,6 +75,11 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
       .catch((error) => {
         alert(error.message);
       });
+  };
+
+  const handleGoogleLogin = () => {
+    promptAsync({ showInRecents: true });
+    getUserData();
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -130,7 +169,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
           }}
         >
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={handleGoogleLogin}
             style={{
               borderColor: "#ddd",
               borderWidth: 2,

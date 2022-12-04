@@ -14,14 +14,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "host.expo.WeGiveYouEat3504",
       "config": {
         "googleMapsApiKey": "AIzaSyDctukg0o-mKXmUU6O8Ixci_xdICLYMoTY"
       }
     },
     "android": {
+      "package": "com.raminradmand.WeGiveYouEat3504",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -29,6 +33,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0b8a7011-ec25-49ef-8095-18003e3aa2bb"
+      }
     }
   }
 }
