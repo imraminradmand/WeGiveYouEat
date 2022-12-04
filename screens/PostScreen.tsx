@@ -33,7 +33,6 @@ export type PredictionType = {
 
 const PostScreen = ({ route }: { route: any }) => {
   const { authParam } = route.params;
-
   const [hasPermissions, setPermissions] = useState(false);
   const [image, setImage] = useState("");
   const [base64, setBase64] = useState("");
@@ -125,8 +124,20 @@ const PostScreen = ({ route }: { route: any }) => {
     }
   };
 
-  const handlePostToDB = () => {
-    const body = `{"postName": "${postName}", "description": "${desc}", "address": "${search.term}", "longitude": ${long}, "latitude":${lat}, "phone":"${phone}", "user_uid":"${phone}", "image": "${base64}"}`;
+  const handlePostToDB = async () => {
+    const base64Response = await fetch(`data:image/jpeg;base64,${base64}`);
+    const blob = await base64Response.blob();
+
+    const body = `{
+      "postName": "${postName}",
+      "description":"${desc}",
+      "longitude": ${long},
+      "latitude":${lat},
+      "phoneNumber": "${phone}",
+      "useruid":"${authParam.uid}",
+      "image": "${blob}",
+      "address": "${search.term}"
+  }`;
     addPost(body).catch((err) => console.log(err));
   };
 
