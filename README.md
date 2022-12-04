@@ -15,7 +15,7 @@ Ramin Radmand : [GitHub](https://github.com/imraminradmand/)
 
 WeGiveYouEat is aimed to reduce the amount of food that gets wasted from large gatherings by connecting leftover food with people in need. The intended audience for this application is everyone! Users will be able to make a post which they will take an image of the extra food they have left over, fill out information about what it is that they are giving out such as, portion size, dietary restrictions, good till date, their location, and their preferred pick up time. Other users will be able to view listings based on their current location and how far they are willing to travel, and other available filters. This will be a progressive web application created using typed React Native which takes advantage of the Google Maps API and cloud services provided by Google Cloud.
 
-### Figma Prototype
+### UI Design
 ![Group 1](https://user-images.githubusercontent.com/69999501/205470976-ec232b69-afca-41e1-8cc9-17ada19cb430.svg)
 
 
