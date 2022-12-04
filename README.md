@@ -1,4 +1,5 @@
 # WeGiveYouEat
+![Screenshot 2022-12-03 at 2 16 00 PM](https://user-images.githubusercontent.com/69999501/205470044-12e6a2af-25be-47c3-98ec-43c33449241b.png)
 
 ### About us
 
