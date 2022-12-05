@@ -6,12 +6,12 @@ module.exports.register = (app, database) => {
   });
 
   // Get all posts +
-  // Get only longitude, latitude, image, and post id of all posts
+  // Get only longitude, latitude, and post id of all posts
   app.get("/api/posts", async (req, res) => {
     let opt2 = req.query["opt2"];
     let query;
     if (typeof opt2 !== "undefined" && opt2 === "T") {
-      query = database.query("select longitude, latitude, id, image from posts;");
+      query = database.query("select longitude, latitude, id from posts;");
       const records = await query;
       res.status(200).send(JSON.stringify(records)).end();
     } else {
@@ -145,8 +145,7 @@ module.exports.register = (app, database) => {
           longitude,
           latitude,
           phoneNumber,
-          useruid,
-          image,
+          useruid
         ]
       );
       const records = await query;
