@@ -15,7 +15,7 @@ import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
 import { getAllPosts, getPostInfo } from "../apiCalls/calls";
 import { useIsFocused } from "@react-navigation/native";
-import { async } from "@firebase/util";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const styles = StyleSheet.create({
   map: {
@@ -76,6 +76,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: -0.5,
   },
+  spinnerText: {
+    color: "#FFF",
+    fontFamily: "Roboto-Regular",
+  },
 });
 
 const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
@@ -84,6 +88,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   const [location, setLocation] = useState<LocationObject>();
   const [postObject, setpostObject] = useState<any[]>([]);
   const [imgRefs, setImgRefs] = useState(new Map());
+  const [loading, setLoading] = useState(true);
   const mapRef = useRef<any>();
   const isFocused = useIsFocused();
 
@@ -103,11 +108,13 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   }, []);
 
   useEffect(() => {
-    const getImageURL = async (path: string) => {
-      let imgURL;
-      getDownloadURL(ref(storage, path)).then((url) => (imgURL = url));
-      return imgURL;
-    };
+    isFocused && setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }, [isFocused]);
+
+  useEffect(() => {
     isFocused &&
       getAllPosts().then((data) => {
         const tmpObj: React.SetStateAction<any[]> = [];
@@ -131,7 +138,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         });
         setpostObject(tmpObj);
       });
-  }, [isFocused]);
+  }, [isFocused, loading]);
 
   const goToMyLocation = async () => {
     mapRef.current.animateCamera({
@@ -144,6 +151,11 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={styles.spinnerText}
+      />
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}

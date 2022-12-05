@@ -25,14 +25,13 @@ import { deleteUser, signOut } from "firebase/auth";
 import {
   deletePost,
   deleteCurrentUser,
-  getAllPosts,
-  getPostFromId,
   getUser,
   getUserPosts,
   updateUser,
 } from "../apiCalls/calls";
 
 import { TextInput } from "react-native-paper";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 LogBox.ignoreAllLogs();
 
@@ -43,6 +42,7 @@ const AccountDetails = ({
   navigation: any;
   route: any;
 }) => {
+  const storage = getStorage();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -57,9 +57,12 @@ const AccountDetails = ({
 
   const { authParam } = route.params;
 
-  const removePost = (id: number) => {
+  const removePost = (id: number, postName: string) => {
     deletePost(id);
-    setRefreshData(true);
+    const imgRef = ref(storage, `${postName}_${authParam.uid}`);
+    deleteObject(imgRef)
+      .then(() => setRefreshData(true))
+      .catch(console.error);
   };
 
   const Item = ({ data }: { data: any }) => {
@@ -69,7 +72,7 @@ const AccountDetails = ({
         <TouchableOpacity
           style={{ position: "absolute", top: 20, left: 250 }}
           onPress={() => {
-            removePost(data.id);
+            removePost(data.id, data.postName);
           }}
         >
           <Feather name="x" color={"red"} size={25} />
