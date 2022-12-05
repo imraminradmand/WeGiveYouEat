@@ -24,8 +24,9 @@ WeGiveYouEat is aimed to reduce the amount of food that gets wasted from large g
 
 As part of this app's functionality there is a need for end users to connect with other users within their desired radius, the [Google Maps API](https://developers.google.com/maps/documentation/android-sdk) will be used for this. Allowing users to adjust the map to find posts closest to them so no one has to go out of their way!
 
-As storing information is a crucial part of this project [Google Cloud MySQL](https://cloud.google.com/sql/mysql) will be used. This option has been chosen over the other possible options as a sequential database allows for a more fluid implementation of the desired outcome. Communication with the database is enabled through a REST API hosted on a [Compute Engine](https://cloud.google.com/compute#section-4) instance and [PM2](https://pm2.io/docs/runtime/overview/). As authentication is another requirement, [Firebase Authentication](https://firebase.google.com/docs/auth) will be used. 
+As storing information is a crucial part of this project [Google Cloud MySQL](https://cloud.google.com/sql/mysql) will be used. This option has been chosen over the other possible options as a sequential database allows for a more fluid implementation of the desired outcome. Communication with the database is enabled through a REST API hosted on a [Compute Engine](https://cloud.google.com/compute#section-4) instance and [PM2](https://pm2.io/docs/runtime/overview/). [Firebase Storage](https://firebase.google.com/docs/storage) is also used to store post images, which will be retrieved on a as per need basis when displaying pins on the map, or displaying the post image on each individual post page. Authentication is another requirement that will levarge [Firebase Authentication](https://firebase.google.com/docs/auth), allowing for both email/password and third party authentication.
 
 The diagram below shows a high level architecture of this app, and outlines what Google Cloud service will be used.
 
-![Screenshot 2022-11-27 at 9 06 29 PM](https://user-images.githubusercontent.com/69999501/204191991-58e40085-38b4-40ba-9062-75d1f75cc7f1.png)
+![newHLD](https://user-images.githubusercontent.com/69999501/205745962-e8db4757-905e-4c31-b06a-9a52aab6265d.png)
+
