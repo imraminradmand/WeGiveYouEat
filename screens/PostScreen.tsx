@@ -131,7 +131,8 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const handlePostToDB = async () => {
     const base64Response = await fetch(`data:image/jpeg;base64,${base64}`);
     const blob = await base64Response.blob();
-    uploadImageToFirestore(blob, `${postName}_${authParam.uid}`);
+    const dateNow = new Date();
+    uploadImageToFirestore(blob, `${postName}_${dateNow}`);
     const body = `{
         "postName": "${postName}",
         "description":"${desc}",
@@ -139,7 +140,8 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
         "latitude":${lat},
         "phoneNumber": "${phone}",
         "useruid":"${authParam.uid}",
-        "address": "${search.term}"
+        "address": "${search.term}",
+        "date": "${dateNow}"
     }`;
     addPost(body).catch((err) => console.log(err));
     alert("Post Successfully added!");

@@ -6,12 +6,12 @@ module.exports.register = (app, database) => {
   });
 
   // Get all posts +
-  // Get only longitude, latitude, and post id of all posts
+  // Get only longitude, latitude, date, and post id of all posts
   app.get("/api/posts", async (req, res) => {
     let opt2 = req.query["opt2"];
     let query;
     if (typeof opt2 !== "undefined" && opt2 === "T") {
-      query = database.query("select longitude, latitude, id from posts;");
+      query = database.query("select longitude, latitude, id, date from posts;");
       const records = await query;
       res.status(200).send(JSON.stringify(records)).end();
     } else {
@@ -119,6 +119,7 @@ module.exports.register = (app, database) => {
     let phoneNumber = req.body.phoneNumber;
     let useruid = req.body.useruid;
     let address = req.body.address;
+    let date = req.body.date
 
     if (
       typeof postName === "undefined" ||
@@ -127,7 +128,8 @@ module.exports.register = (app, database) => {
       typeof latitude === "undefined" ||
       typeof phoneNumber === "undefined" ||
       typeof useruid === "undefined" ||
-      typeof address === "undefined"
+      typeof address === "undefined" ||
+      typeof date === "undefined"
     ) {
       res.status(400).send({
         success: false,
@@ -137,7 +139,7 @@ module.exports.register = (app, database) => {
       });
     } else {
       let query = database.query(
-        "INSERT INTO posts (postName, description, address, longitude, latitude, phone, user_uid) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO posts (postName, description, address, longitude, latitude, phone, user_uid, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         [
           postName,
           description,
@@ -145,7 +147,8 @@ module.exports.register = (app, database) => {
           longitude,
           latitude,
           phoneNumber,
-          useruid
+          useruid,
+          date
         ]
       );
       const records = await query;
