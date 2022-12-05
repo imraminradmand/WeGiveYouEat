@@ -111,7 +111,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
     isFocused && setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 5000);
+    }, 3000);
   }, [isFocused]);
 
   useEffect(() => {
