@@ -108,10 +108,10 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   }, []);
 
   useEffect(() => {
-    isFocused && setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+    isFocused &&
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
   }, [isFocused]);
 
   useEffect(() => {
