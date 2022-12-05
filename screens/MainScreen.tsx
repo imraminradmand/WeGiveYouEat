@@ -8,15 +8,13 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import * as Location from "expo-location";
 import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
 import { getAllPosts, getPostInfo } from "../apiCalls/calls";
 import { useIsFocused } from "@react-navigation/native";
-import { Buffer } from "buffer";
 
 const styles = StyleSheet.create({
   map: {
@@ -80,6 +78,8 @@ const styles = StyleSheet.create({
 });
 
 const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
+  const { authParam } = route.params;
+  const storage = getStorage();
   const [location, setLocation] = useState<LocationObject>();
   const [postObject, setpostObject] = useState<any[]>([]);
   const mapRef = useRef<any>();
@@ -100,26 +100,46 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
     })();
   }, []);
 
-  function blobToBase64(blob: Blob) {
-    return new Promise((resolve, _) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.readAsDataURL(blob);
-    });
-  }
+  // const getPostInfo = () => {
+  //   const tmpObj: React.SetStateAction<any[]> = [];
+  //   getAllPosts().then((data) => {
+  //     data.forEach((post: any) => {
+  //       const imagePath = `${post.postName}_${authParam.uid}`;
+  //       let imgURL;
+  //       getDownloadURL(ref(storage, imagePath))
+  //         .then((url) => (imgURL = url))
+  //         .catch((err) => console.log(err));
+  //       const singleCord = {
+  //         latitude: post.latitude,
+  //         longitude: post.longitude,
+  //         name: post.postName,
+  //         desc: post.description,
+  //         id: post.id,
+  //         image: imgURL,
+  //       };
+  //       tmpObj.push(singleCord);
+  //     });
+  //   });
+  //   setpostObject(tmpObj);
+  // };
 
   useEffect(() => {
     isFocused &&
       getAllPosts().then((data) => {
         const tmpObj: React.SetStateAction<any[]> = [];
-
         data.forEach((post: any) => {
+          const imagePath = `${post.postName}_${authParam.uid}`;
+          let imgURL;
+          getDownloadURL(ref(storage, imagePath))
+            .then((url) => (imgURL = url))
+            .catch((err) => (imgURL = ""));
           const singleCord = {
             latitude: post.latitude,
             longitude: post.longitude,
             name: post.postName,
             desc: post.description,
             id: post.id,
+            image: imgURL,
           };
           tmpObj.push(singleCord);
         });
@@ -172,12 +192,12 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
                       <View style={styles.bubble}>
                         <Text style={styles.name}>{post.name}</Text>
                         <Text style={styles.description}>{post.desc}</Text>
-                        {/* <Image
+                        <Image
                           style={styles.image}
                           source={{
-                            uri: `data:image/jpg;base64,${post.image}`,
+                            uri: post.image,
                           }}
-                        /> */}
+                        />
                       </View>
                       <View style={styles.arrowBorder}></View>
                       <View style={styles.arrow}></View>
