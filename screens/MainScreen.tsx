@@ -15,6 +15,7 @@ import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
 import { getAllPosts, getPostInfo } from "../apiCalls/calls";
 import { useIsFocused } from "@react-navigation/native";
+import { async } from "@firebase/util";
 
 const styles = StyleSheet.create({
   map: {
@@ -82,6 +83,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   const storage = getStorage();
   const [location, setLocation] = useState<LocationObject>();
   const [postObject, setpostObject] = useState<any[]>([]);
+  const [imgRefs, setImgRefs] = useState(new Map());
   const mapRef = useRef<any>();
   const isFocused = useIsFocused();
 
@@ -124,22 +126,27 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   // };
 
   useEffect(() => {
+    const getImageURL = async (path: string) => {
+      let imgURL;
+      getDownloadURL(ref(storage, path)).then((url) => (imgURL = url));
+      return imgURL;
+    };
     isFocused &&
       getAllPosts().then((data) => {
         const tmpObj: React.SetStateAction<any[]> = [];
         data.forEach((post: any) => {
           const imagePath = `${post.postName}_${authParam.uid}`;
-          let imgURL;
           getDownloadURL(ref(storage, imagePath))
-            .then((url) => (imgURL = url))
-            .catch((err) => (imgURL = ""));
+            .then((url) => {
+              setImgRefs(imgRefs.set(post.id, url));
+            })
+            .catch(console.error);
           const singleCord = {
             latitude: post.latitude,
             longitude: post.longitude,
             name: post.postName,
             desc: post.description,
             id: post.id,
-            image: imgURL,
           };
           tmpObj.push(singleCord);
         });
@@ -154,6 +161,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         longitude: location?.coords.longitude,
       },
     });
+    // console.log(imgRefs);
   };
 
   return (
@@ -195,7 +203,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
                         <Image
                           style={styles.image}
                           source={{
-                            uri: post.image,
+                            uri: imgRefs.get(post.id),
                           }}
                         />
                       </View>
