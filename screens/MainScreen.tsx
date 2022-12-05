@@ -119,7 +119,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
       getAllPosts().then((data) => {
         const tmpObj: React.SetStateAction<any[]> = [];
         data.forEach((post: any) => {
-          const imagePath = `${post.postName}_${authParam.uid}`;
+          const imagePath = `${post.postName}_${post.date}`;
           getDownloadURL(ref(storage, imagePath))
             .then((url) => {
               setImgRefs(imgRefs.set(post.id, url));
