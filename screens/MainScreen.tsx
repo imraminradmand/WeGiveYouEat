@@ -14,8 +14,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
-import { getPostInfo } from "../apiCalls/calls";
+import { getAllPosts, getPostInfo } from "../apiCalls/calls";
 import { useIsFocused } from "@react-navigation/native";
+import { Buffer } from "buffer";
 
 const styles = StyleSheet.create({
   map: {
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
 
 const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   const [location, setLocation] = useState<LocationObject>();
-  const [coordinates, setCoordinates] = useState<any[]>([]);
+  const [postObject, setpostObject] = useState<any[]>([]);
   const mapRef = useRef<any>();
   const isFocused = useIsFocused();
 
@@ -99,19 +100,30 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
     })();
   }, []);
 
+  function blobToBase64(blob: Blob) {
+    return new Promise((resolve, _) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+  }
+
   useEffect(() => {
     isFocused &&
-      getPostInfo("T").then((data) => {
-        const tmpCord: React.SetStateAction<any[]> = [];
+      getAllPosts().then((data) => {
+        const tmpObj: React.SetStateAction<any[]> = [];
+
         data.forEach((post: any) => {
-          // modify api to return images too
           const singleCord = {
             latitude: post.latitude,
             longitude: post.longitude,
+            name: post.postName,
+            desc: post.description,
+            id: post.id,
           };
-          tmpCord.push(singleCord);
+          tmpObj.push(singleCord);
         });
-        setCoordinates(tmpCord);
+        setpostObject(tmpObj);
       });
   }, [isFocused]);
 
@@ -140,8 +152,8 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         }}
       >
         <>
-          {coordinates &&
-            coordinates.map((post: any, _index: any) => {
+          {postObject &&
+            postObject.map((post: any, _index: any) => {
               return (
                 <Marker
                   key={_index}
@@ -158,14 +170,14 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
                   >
                     <View>
                       <View style={styles.bubble}>
-                        <Text style={styles.name}>2 Kebab Skewers</Text>
-                        <Text style={styles.description}>
-                          1 Beef + 1 Chicken
-                        </Text>
-                        <Image
+                        <Text style={styles.name}>{post.name}</Text>
+                        <Text style={styles.description}>{post.desc}</Text>
+                        {/* <Image
                           style={styles.image}
-                          source={require("../assets/testPoster.jpeg")}
-                        />
+                          source={{
+                            uri: `data:image/jpg;base64,${post.image}`,
+                          }}
+                        /> */}
                       </View>
                       <View style={styles.arrowBorder}></View>
                       <View style={styles.arrow}></View>
