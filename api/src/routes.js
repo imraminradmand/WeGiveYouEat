@@ -11,6 +11,7 @@ module.exports.register = (app, database) => {
     let opt2 = req.query["opt2"];
     let query;
     if (typeof opt2 !== "undefined" && opt2 === "T") {
+
       query = database.query("select longitude, latitude, id, date from posts;");
       const records = await query;
       res.status(200).send(JSON.stringify(records)).end();
@@ -121,6 +122,7 @@ module.exports.register = (app, database) => {
     let address = req.body.address;
     let date = req.body.date
 
+
     if (
       typeof postName === "undefined" ||
       typeof description === "undefined" ||
@@ -149,6 +151,7 @@ module.exports.register = (app, database) => {
           phoneNumber,
           useruid,
           date
+
         ]
       );
       const records = await query;
