@@ -13,9 +13,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import CustomButton from "../components/CustomButton";
 
-const SinglePostScreen = ({ navigation }: { navigation: any }) => {
+const SinglePostScreen = ({
+  navigation,
+  route,
+}: {
+  navigation: any;
+  route: any;
+}) => {
+  const { name, desc, img, phone, address } = route.params;
   const args = {
-    number: "5879988311", // String value with the number to call
+    number: phone, // String value with the number to call
     prompt: true, // Optional boolean property. Determines if the user should be prompted prior to the call
     skipCanOpen: true, // Skip the canOpenURL check
   };
@@ -24,7 +31,7 @@ const SinglePostScreen = ({ navigation }: { navigation: any }) => {
   };
 
   const giveDirection = () => {
-    const fullAddress = "2500 University Dr NW, Calgary, AB T2N 1N4";
+    const fullAddress = address;
     const url = Platform.select({
       ios: `maps:0,0?q=${fullAddress}`,
       android: `geo:0,0?q=${fullAddress}`,
@@ -32,6 +39,7 @@ const SinglePostScreen = ({ navigation }: { navigation: any }) => {
 
     Linking.openURL(url!);
   };
+
   return (
     <ScrollView style={styles.backg}>
       <SafeAreaView>
@@ -43,21 +51,19 @@ const SinglePostScreen = ({ navigation }: { navigation: any }) => {
         >
           <Feather name="chevron-left" color={"#AD40AF"} size={32} />
         </TouchableOpacity>
-        {/* Dynamically get image here */}
         <Image
           style={styles.image}
-          source={require("../assets/testPoster.jpeg")}
+          source={{
+            uri: img,
+            width: 32,
+            height: 250,
+          }}
         />
         <View style={styles.title}>
-          <Text style={styles.titleText}>Post Title</Text>
+          <Text style={styles.titleText}>{name}</Text>
         </View>
         <View style={styles.descBox}>
-          <Text style={styles.desc}>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-            Blanditiis, quidem sapiente, neque magnam laborum commodi iste sint
-            cum voluptatibus eos perferendis dignissimos dolor voluptatem
-            repellat quis. Illum aperiam sed repudiandae.
-          </Text>
+          <Text style={styles.desc}>{desc}</Text>
         </View>
         <View style={styles.callButton}>
           <CustomButton label="CALL POSTER" onPress={makeCall} />

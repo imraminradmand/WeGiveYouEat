@@ -102,29 +102,6 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
     })();
   }, []);
 
-  // const getPostInfo = () => {
-  //   const tmpObj: React.SetStateAction<any[]> = [];
-  //   getAllPosts().then((data) => {
-  //     data.forEach((post: any) => {
-  //       const imagePath = `${post.postName}_${authParam.uid}`;
-  //       let imgURL;
-  //       getDownloadURL(ref(storage, imagePath))
-  //         .then((url) => (imgURL = url))
-  //         .catch((err) => console.log(err));
-  //       const singleCord = {
-  //         latitude: post.latitude,
-  //         longitude: post.longitude,
-  //         name: post.postName,
-  //         desc: post.description,
-  //         id: post.id,
-  //         image: imgURL,
-  //       };
-  //       tmpObj.push(singleCord);
-  //     });
-  //   });
-  //   setpostObject(tmpObj);
-  // };
-
   useEffect(() => {
     const getImageURL = async (path: string) => {
       let imgURL;
@@ -147,6 +124,8 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
             name: post.postName,
             desc: post.description,
             id: post.id,
+            phone: post.phone,
+            address: post.address,
           };
           tmpObj.push(singleCord);
         });
@@ -161,7 +140,6 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         longitude: location?.coords.longitude,
       },
     });
-    // console.log(imgRefs);
   };
 
   return (
@@ -193,7 +171,13 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
                   <Callout
                     tooltip
                     onPress={() => {
-                      navigation.navigate("SinglePost");
+                      navigation.navigate("SinglePost", {
+                        name: post.name,
+                        desc: post.desc,
+                        img: imgRefs.get(post.id),
+                        phone: post.phone,
+                        address: post.address,
+                      });
                     }}
                   >
                     <View>
