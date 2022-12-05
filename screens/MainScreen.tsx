@@ -8,14 +8,14 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import * as Location from "expo-location";
 import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
-import { getPostInfo } from "../apiCalls/calls";
+import { getAllPosts, getPostInfo } from "../apiCalls/calls";
 import { useIsFocused } from "@react-navigation/native";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const styles = StyleSheet.create({
   map: {
@@ -76,11 +76,19 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: -0.5,
   },
+  spinnerText: {
+    color: "#FFF",
+    fontFamily: "Roboto-Regular",
+  },
 });
 
 const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
+  const { authParam } = route.params;
+  const storage = getStorage();
   const [location, setLocation] = useState<LocationObject>();
-  const [coordinates, setCoordinates] = useState<any[]>([]);
+  const [postObject, setpostObject] = useState<any[]>([]);
+  const [imgRefs, setImgRefs] = useState(new Map());
+  const [loading, setLoading] = useState(true);
   const mapRef = useRef<any>();
   const isFocused = useIsFocused();
 
@@ -100,20 +108,37 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   }, []);
 
   useEffect(() => {
+    isFocused && setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, [isFocused]);
+
+  useEffect(() => {
     isFocused &&
-      getPostInfo("T").then((data) => {
-        const tmpCord: React.SetStateAction<any[]> = [];
+      getAllPosts().then((data) => {
+        const tmpObj: React.SetStateAction<any[]> = [];
         data.forEach((post: any) => {
-          // modify api to return images too
+          const imagePath = `${post.postName}_${authParam.uid}`;
+          getDownloadURL(ref(storage, imagePath))
+            .then((url) => {
+              setImgRefs(imgRefs.set(post.id, url));
+            })
+            .catch(console.error);
           const singleCord = {
             latitude: post.latitude,
             longitude: post.longitude,
+            name: post.postName,
+            desc: post.description,
+            id: post.id,
+            phone: post.phone,
+            address: post.address,
           };
-          tmpCord.push(singleCord);
+          tmpObj.push(singleCord);
         });
-        setCoordinates(tmpCord);
+        setpostObject(tmpObj);
       });
-  }, [isFocused]);
+  }, [isFocused, loading]);
 
   const goToMyLocation = async () => {
     mapRef.current.animateCamera({
@@ -126,6 +151,11 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={styles.spinnerText}
+      />
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
@@ -140,8 +170,8 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         }}
       >
         <>
-          {coordinates &&
-            coordinates.map((post: any, _index: any) => {
+          {postObject &&
+            postObject.map((post: any, _index: any) => {
               return (
                 <Marker
                   key={_index}
@@ -153,18 +183,24 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
                   <Callout
                     tooltip
                     onPress={() => {
-                      navigation.navigate("SinglePost");
+                      navigation.navigate("SinglePost", {
+                        name: post.name,
+                        desc: post.desc,
+                        img: imgRefs.get(post.id),
+                        phone: post.phone,
+                        address: post.address,
+                      });
                     }}
                   >
                     <View>
                       <View style={styles.bubble}>
-                        <Text style={styles.name}>2 Kebab Skewers</Text>
-                        <Text style={styles.description}>
-                          1 Beef + 1 Chicken
-                        </Text>
+                        <Text style={styles.name}>{post.name}</Text>
+                        <Text style={styles.description}>{post.desc}</Text>
                         <Image
                           style={styles.image}
-                          source={require("../assets/testPoster.jpeg")}
+                          source={{
+                            uri: imgRefs.get(post.id),
+                          }}
                         />
                       </View>
                       <View style={styles.arrowBorder}></View>

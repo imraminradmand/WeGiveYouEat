@@ -20,6 +20,7 @@ import CustomButton from "../components/CustomButton";
 import { useDebounce } from "../hooks/useDebounce";
 import SearchBarWithAutocomplete from "../components/SearchBarWithAutoComplete";
 import { addPost } from "../apiCalls/calls";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 export type PredictionType = {
   description: string;
@@ -32,10 +33,13 @@ export type PredictionType = {
 };
 
 const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
+  const storage = getStorage();
+
   const { authParam } = route.params;
   const [hasPermissions, setPermissions] = useState(false);
   const [image, setImage] = useState("");
   const [base64, setBase64] = useState("");
+  const [imgPath, setImgPath] = useState("");
 
   const [lat, setLat] = useState(0);
   const [long, setLong] = useState(0);
@@ -127,7 +131,7 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const handlePostToDB = async () => {
     const base64Response = await fetch(`data:image/jpeg;base64,${base64}`);
     const blob = await base64Response.blob();
-
+    uploadImageToFirestore(blob, `${postName}_${authParam.uid}`);
     const body = `{
         "postName": "${postName}",
         "description":"${desc}",
@@ -135,7 +139,6 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
         "latitude":${lat},
         "phoneNumber": "${phone}",
         "useruid":"${authParam.uid}",
-        "image": "${blob}",
         "address": "${search.term}"
     }`;
     addPost(body).catch((err) => console.log(err));
@@ -143,6 +146,15 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
     navigation.navigate("Home");
   };
 
+  const uploadImageToFirestore = (
+    blob: Blob | ArrayBuffer,
+    storageRef: string
+  ) => {
+    const storageRefrence = ref(storage, storageRef);
+    uploadBytes(storageRefrence, blob).then((snapshot) => {
+      console.log("upload complete");
+    });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView style={{ flex: 1 }}>
