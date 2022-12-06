@@ -46,6 +46,7 @@ const AccountDetails = ({
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [date, setDate] = useState("");
 
   const [userPosts, setUserPosts] = useState<any[]>([]);
   const [refreshData, setRefreshData] = useState(false);
@@ -57,9 +58,9 @@ const AccountDetails = ({
 
   const { authParam } = route.params;
 
-  const removePost = (id: number, postName: string) => {
+  const removePost = (id: number, postName: string, date: string) => {
     deletePost(id);
-    const imgRef = ref(storage, `${postName}_${authParam.uid}`);
+    const imgRef = ref(storage, `${postName}_${date}`);
     deleteObject(imgRef)
       .then(() => setRefreshData(true))
       .catch(console.error);
@@ -72,7 +73,7 @@ const AccountDetails = ({
         <TouchableOpacity
           style={{ position: "absolute", top: 20, left: 250 }}
           onPress={() => {
-            removePost(data.id, data.postName);
+            removePost(data.id, data.postName, data.date);
           }}
         >
           <Feather name="x" color={"red"} size={25} />
