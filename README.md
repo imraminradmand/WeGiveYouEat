@@ -33,8 +33,7 @@ The diagram below shows the high level architecture of this app, and outlines wh
 ### Demo
 
 
-https://user-images.githubusercontent.com/69999501/205833152-9dca5dab-1e5a-4abf-88a5-f1936f6116c8.mp4
-
+https://user-images.githubusercontent.com/69999501/205838294-052dd49c-368d-417d-baf9-3edf62f9b016.mp4
 
 
 ## How to run
