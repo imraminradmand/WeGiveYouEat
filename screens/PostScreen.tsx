@@ -154,7 +154,7 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
       setLoading(false);
       alert("Post Successfully added!");
       navigation.navigate("Home");
-    }, 10000);
+    }, 12000);
   };
   const uploadImageToFirestore = (
     blob: Blob | ArrayBuffer,

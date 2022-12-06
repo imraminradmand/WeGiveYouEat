@@ -46,7 +46,6 @@ const AccountDetails = ({
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [date, setDate] = useState("");
 
   const [userPosts, setUserPosts] = useState<any[]>([]);
   const [refreshData, setRefreshData] = useState(false);
@@ -87,6 +86,7 @@ const AccountDetails = ({
   );
 
   useEffect(() => {
+    setRefreshData(false);
     getUserPosts(authParam.uid)
       .then((data) => setUserPosts(data))
       .catch((err) => {
