@@ -150,7 +150,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-      }, 3000);
+      }, 1000);
       return () => {
         console.log("left screen");
       };
