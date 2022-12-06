@@ -30,3 +30,12 @@ The diagram below shows the high level architecture of this app, and outlines wh
 
 ![newHLD](https://user-images.githubusercontent.com/69999501/205745962-e8db4757-905e-4c31-b06a-9a52aab6265d.png)
 
+## How to run
+1. Place `.env` in root directory - (if you are working on the API there is a seperate `.env` file)
+2. Run `npm i` to install all dependencies
+3. Run either `expo start` or `npx expo start` to start application, you will be able to choose what platform to run on or can specify from the beginning, follow examples belows.
+   * To run on Android - `expo start --android`
+   * To run on iOS - `expo start --ios`
+   
+   
+If you face any issues run `npx expo -c` to clear all cache and restart the app
