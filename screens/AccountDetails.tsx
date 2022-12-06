@@ -114,7 +114,7 @@ const AccountDetails = ({
     setChangeName(!changeName);
     if (nameEditDone === "Done") {
       setNameEditDone("Edit");
-      alert("Name changed successfully");
+      Alert.alert("Name Change Change", "Successful!", [{ text: "OK" }]);
       const body = `{"uid": "${authParam.uid}", "name": "${fullName}"}`;
       updateUser(body);
     } else if (nameEditDone === "Edit") {
@@ -126,7 +126,7 @@ const AccountDetails = ({
     setChangePhone(!changePhone);
     if (phoneEditDone === "Done") {
       setPhoneEditDone("Edit");
-      alert("Phone number changed successfully");
+      Alert.alert("Phone Number Change", "Successful!", [{ text: "OK" }]);
       const body = `{"uid": "${authParam.uid}", "phone": "${phoneNumber}"}`;
       updateUser(body);
     } else if (phoneEditDone === "Edit") {

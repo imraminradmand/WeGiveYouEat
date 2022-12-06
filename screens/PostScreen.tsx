@@ -9,6 +9,7 @@ import {
   TextInput,
   Keyboard,
   ScrollView,
+  Alert,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -152,9 +153,9 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      alert("Post Successfully added!");
-      navigation.navigate("Home");
-    }, 12000);
+      Alert.alert("Post Added", "Successful!", [{ text: "OK" }]);
+      navigation.navigate("Home", { refresh: true });
+    }, 7000);
   };
   const uploadImageToFirestore = (
     blob: Blob | ArrayBuffer,
