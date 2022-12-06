@@ -30,6 +30,13 @@ The diagram below shows the high level architecture of this app, and outlines wh
 
 ![newHLD](https://user-images.githubusercontent.com/69999501/205745962-e8db4757-905e-4c31-b06a-9a52aab6265d.png)
 
+### Demo
+
+
+https://user-images.githubusercontent.com/69999501/205833152-9dca5dab-1e5a-4abf-88a5-f1936f6116c8.mp4
+
+
+
 ## How to run
 1. Place `.env` in root directory - (if you are working on the API there is a seperate `.env` file)
 2. Run `npm i` to install all dependencies
