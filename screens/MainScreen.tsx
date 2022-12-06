@@ -117,6 +117,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   useEffect(() => {
     isFocused &&
       getAllPosts().then((data) => {
+        console.log("triggered useEffect");
         const tmpObj: React.SetStateAction<any[]> = [];
         data.forEach((post: any) => {
           const imagePath = `${post.postName}_${post.date}`;
@@ -138,7 +139,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         });
         setpostObject(tmpObj);
       });
-  }, [isFocused, loading]);
+  }, [isFocused]);
 
   const goToMyLocation = async () => {
     mapRef.current.animateCamera({
@@ -147,6 +148,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         longitude: location?.coords.longitude,
       },
     });
+    console.log(imgRefs);
   };
 
   return (
