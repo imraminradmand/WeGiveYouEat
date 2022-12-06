@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { useState, useEffect } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
 import {
@@ -15,6 +15,7 @@ import { FAB } from "react-native-paper";
 import { LocationObject } from "expo-location";
 import { getAllPosts, getPostInfo } from "../apiCalls/calls";
 import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import Spinner from "react-native-loading-spinner-overlay";
 
 const styles = StyleSheet.create({
@@ -84,11 +85,13 @@ const styles = StyleSheet.create({
 
 const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   const { authParam } = route.params;
+
   const storage = getStorage();
   const [location, setLocation] = useState<LocationObject>();
   const [postObject, setpostObject] = useState<any[]>([]);
   const [imgRefs, setImgRefs] = useState(new Map());
   const [loading, setLoading] = useState(true);
+
   const mapRef = useRef<any>();
   const isFocused = useIsFocused();
 
@@ -117,6 +120,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
   useEffect(() => {
     isFocused &&
       getAllPosts().then((data) => {
+        console.log("triggered useEffect");
         const tmpObj: React.SetStateAction<any[]> = [];
         data.forEach((post: any) => {
           const imagePath = `${post.postName}_${post.date}`;
@@ -138,7 +142,20 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         });
         setpostObject(tmpObj);
       });
-  }, [isFocused, loading]);
+  }, [isFocused]);
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log("back home");
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+      return () => {
+        console.log("left screen");
+      };
+    }, [])
+  );
 
   const goToMyLocation = async () => {
     mapRef.current.animateCamera({
@@ -147,6 +164,7 @@ const MainScreen = ({ navigation, route }: { navigation: any; route: any }) => {
         longitude: location?.coords.longitude,
       },
     });
+    console.log(imgRefs);
   };
 
   return (

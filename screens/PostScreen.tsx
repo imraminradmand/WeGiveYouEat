@@ -9,6 +9,7 @@ import {
   TextInput,
   Keyboard,
   ScrollView,
+  Alert,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -21,6 +22,7 @@ import { useDebounce } from "../hooks/useDebounce";
 import SearchBarWithAutocomplete from "../components/SearchBarWithAutoComplete";
 import { addPost } from "../apiCalls/calls";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
+import Spinner from "react-native-loading-spinner-overlay";
 
 export type PredictionType = {
   description: string;
@@ -39,7 +41,7 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   const [hasPermissions, setPermissions] = useState(false);
   const [image, setImage] = useState("");
   const [base64, setBase64] = useState("");
-  const [imgPath, setImgPath] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [lat, setLat] = useState(0);
   const [long, setLong] = useState(0);
@@ -129,6 +131,7 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   };
 
   const handlePostToDB = async () => {
+    waitForUploadToComplete();
     const base64Response = await fetch(`data:image/jpeg;base64,${base64}`);
     const blob = await base64Response.blob();
     const dateNow = new Date();
@@ -144,10 +147,16 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
         "date": "${dateNow}"
     }`;
     addPost(body).catch((err) => console.log(err));
-    alert("Post Successfully added!");
-    navigation.navigate("Home");
   };
 
+  const waitForUploadToComplete = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      Alert.alert("Post Added", "Successful!", [{ text: "OK" }]);
+      navigation.navigate("Home", { refresh: true });
+    }, 7000);
+  };
   const uploadImageToFirestore = (
     blob: Blob | ArrayBuffer,
     storageRef: string
@@ -159,6 +168,11 @@ const PostScreen = ({ route, navigation }: { route: any; navigation: any }) => {
   };
   return (
     <SafeAreaView style={styles.container}>
+      <Spinner
+        visible={loading}
+        textContent={"Uploading..."}
+        textStyle={styles.spinnerText}
+      />
       <KeyboardAwareScrollView style={{ flex: 1 }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -307,5 +321,9 @@ const styles = StyleSheet.create({
   },
   imageView: {
     top: "5%",
+  },
+  spinnerText: {
+    color: "#FFF",
+    fontFamily: "Roboto-Regular",
   },
 });

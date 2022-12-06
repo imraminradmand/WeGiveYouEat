@@ -57,9 +57,9 @@ const AccountDetails = ({
 
   const { authParam } = route.params;
 
-  const removePost = (id: number, postName: string) => {
+  const removePost = (id: number, postName: string, date: string) => {
     deletePost(id);
-    const imgRef = ref(storage, `${postName}_${authParam.uid}`);
+    const imgRef = ref(storage, `${postName}_${date}`);
     deleteObject(imgRef)
       .then(() => setRefreshData(true))
       .catch(console.error);
@@ -72,7 +72,7 @@ const AccountDetails = ({
         <TouchableOpacity
           style={{ position: "absolute", top: 20, left: 250 }}
           onPress={() => {
-            removePost(data.id, data.postName);
+            removePost(data.id, data.postName, data.date);
           }}
         >
           <Feather name="x" color={"red"} size={25} />
@@ -86,6 +86,7 @@ const AccountDetails = ({
   );
 
   useEffect(() => {
+    setRefreshData(false);
     getUserPosts(authParam.uid)
       .then((data) => setUserPosts(data))
       .catch((err) => {
@@ -113,7 +114,7 @@ const AccountDetails = ({
     setChangeName(!changeName);
     if (nameEditDone === "Done") {
       setNameEditDone("Edit");
-      alert("Name changed successfully");
+      Alert.alert("Name Change Change", "Successful!", [{ text: "OK" }]);
       const body = `{"uid": "${authParam.uid}", "name": "${fullName}"}`;
       updateUser(body);
     } else if (nameEditDone === "Edit") {
@@ -125,7 +126,7 @@ const AccountDetails = ({
     setChangePhone(!changePhone);
     if (phoneEditDone === "Done") {
       setPhoneEditDone("Edit");
-      alert("Phone number changed successfully");
+      Alert.alert("Phone Number Change", "Successful!", [{ text: "OK" }]);
       const body = `{"uid": "${authParam.uid}", "phone": "${phoneNumber}"}`;
       updateUser(body);
     } else if (phoneEditDone === "Edit") {
