@@ -31,6 +31,12 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const comingSoon = () => {
+    Alert.alert("Coming Soon", "This feature is not yet available", [
+      { text: "OK" },
+    ]);
+  }
+
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
@@ -155,7 +161,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
           }}
         >
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={comingSoon}
             style={{
               borderColor: "#ddd",
               borderWidth: 2,
@@ -172,7 +178,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={comingSoon}
             style={{
               borderColor: "#ddd",
               borderWidth: 2,
@@ -189,7 +195,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={comingSoon}
             style={{
               borderColor: "#ddd",
               borderWidth: 2,
