@@ -17,7 +17,6 @@ import apple from "../assets/loginPage/apple.png";
 import google from "../assets/loginPage/google.png";
 import ms from "../assets/loginPage/MS.png";
 
-import InputField from "../components/InputField";
 import CustomButton from "../components/CustomButton";
 import { useState } from "react";
 
@@ -36,6 +35,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
+
           if (user) {
             navigation.navigate("Home");
           }
