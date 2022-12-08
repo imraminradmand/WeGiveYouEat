@@ -35,13 +35,12 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
     Alert.alert("Coming Soon", "This feature is not yet available", [
       { text: "OK" },
     ]);
-  }
+  };
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-
           if (user) {
             navigation.navigate("Home");
           }
