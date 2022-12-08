@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
@@ -21,7 +22,11 @@ import CustomButton from "../components/CustomButton";
 import { useState } from "react";
 
 import { auth } from "../firebase";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 
 const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState("");
@@ -41,6 +46,26 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
       .catch((error) => {
         alert(error.message);
       });
+  };
+  const handleForgotPassword = () => {
+    if (email) {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          Alert.alert(
+            `Password reset link sent to ${email}`,
+            "Follow email instructions",
+            [{ text: "OK" }]
+          );
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+    } else {
+      Alert.alert(`No email provided`, "Enter email and try again!", [
+        { text: "OK" },
+      ]);
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -111,7 +136,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
             textContentType="password"
             autoComplete="password"
           />
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={handleForgotPassword}>
             <Text style={{ color: "#AD40AF", fontWeight: "700" }}>Forgot?</Text>
           </TouchableOpacity>
         </View>
